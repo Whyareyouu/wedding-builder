@@ -1,0 +1,179 @@
+{
+  "shared": {
+    "date": "20.06.2026",
+    "wifeName": "Полина",
+    "husbandName": "Никита"
+  },
+  "friends": {
+    "withoutNames": false,
+    "kindWordsForGuests": [
+      "Спасибо, что будете с нами в этот особенный день. Нам очень приятно, что вы с нами!",
+      "Без ваших улыбок не обойдётся!"
+    ]
+  },
+  "places": [
+    {
+      "title": "Торжественная церемония",
+      "address": "Октябрьская ул., 4, Старая Купавна",
+      "startTime": "14:00",
+      "dividerIcon": "icons/heart.svg",
+      "mapSettings": {
+        "coordinates": [
+          55.806953,
+          38.172350
+        ],
+        "hint": "Отдел № 1 Управления ЗАГС по Богородскому городскому округу и городскому округу Черноголовка, Октябрьская ул., 4, Старая Купавна",
+        "markerIcon": "/images/Shelby.png",
+        "yandexMapUrl": "https://yandex.ru/maps/-/CPU4V2yY"
+      }
+    },
+    {
+      "title": "Праздничный банкет",
+      "address": "ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
+      "startTime": "16:00",
+      "mapSettings": {
+        "coordinates": [
+          55.772403,
+          37.923159
+        ],
+        "hint": "Загородный клуб Дольче \n ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
+        "markerIcon": "/images/Shelby.png",
+        "yandexMapUrl": "https://yandex.ru/maps/-/CPU4ZQKi"
+      }
+    }
+  ],
+  "timings": {
+    "title": "План дня",
+    "plan": [
+      {
+        "event": "Церемония",
+        "description": "123",
+        "startTime": "14:00",
+        "icon": {
+          "path": "icons/gem.svg",
+          "width": 64,
+          "height": 64
+        }
+      },
+      {
+        "event": "Сбор гостей",
+        "description": "123",
+        "startTime": "14:00",
+        "icon": {
+          "path": "icons/map.svg",
+          "width": 64,
+          "height": 64
+        }
+      },
+      {
+        "event": "Начало торжества",
+        "description": "123",
+        "startTime": "14:00",
+        "icon": {
+          "path": "icons/bottle.svg",
+          "width": 64,
+          "height": 64
+        }
+      },
+      {
+        "event": "Свадебный торт",
+        "description": "123",
+        "startTime": "14:00",
+        "icon": {
+          "path": "icons/cake.svg",
+          "width": 64,
+          "height": 64
+        }
+      },
+      {
+        "event": "Заврешение торжества",
+        "description": "123",
+        "startTime": "14:00",
+        "icon": {
+          "path": "icons/sparkles.svg",
+          "width": 64,
+          "height": 64
+        }
+      }
+    ]
+  },
+  "details": [
+    "Дорогие гости, приносите с собой веселье и радость в душе, а подарки - в конверте.",
+    "Приятным комплиментом для невесты могут стать: лилии, кустовые розы (нежных розово-белых тонах)"
+  ],
+  "dresscode": {
+    "title": "Дресскод",
+    "colorSchema": [
+      {
+        "color": "#FFD1DC",
+        "maleDressCodeImg": "/dresscode/male-1.png",
+        "femaleDressCodeImg": "/dresscode/female-1.png"
+      },
+      {
+        "color": "#FFB28B",
+        "maleDressCodeImg": "/dresscode/male-1.png",
+        "femaleDressCodeImg": "/dresscode/female-1.png"
+      },
+      {
+        "color": "#E6E6FA",
+        "maleDressCodeImg": "/dresscode/male-1.png",
+        "femaleDressCodeImg": "/dresscode/female-1.png"
+      },
+      {
+        "color": "#EAE0C8",
+        "maleDressCodeImg": "/dresscode/male-1.png",
+        "femaleDressCodeImg": "/dresscode/female-1.png"
+      },
+      {
+        "color": "#FDF4E3",
+        "maleDressCodeImg": "/dresscode/male-1.png",
+        "femaleDressCodeImg": "/dresscode/female-1.png"
+      }
+    ]
+  },
+  "form": [
+    {
+      "type": "input",
+      "required": true,
+      "placeholder": "Если вы придете со своей парой, то укажите оба имени",
+      "name": "personFullName",
+      "label": "ФИО:"
+    },
+    {
+      "type": "radio_group",
+      "required": true,
+      "name": "attend",
+      "groupTitle": "Сможете ли вы присутствовать на нашем торжестве?",
+      "fields": [
+        {
+          "value": "yes",
+          "label": "Смогу прийти с радостью!"
+        },
+        {
+          "value": "no",
+          "label": "К сожалению, не смогу :("
+        }
+      ]
+    },
+    {
+      "type": "checkbox_group",
+      "groupTitle": "Что предпочитаете из напитков?",
+      "name": "alcohol",
+      "required": true,
+      "fields": [
+        {
+          "value": "wine",
+          "label": "Вино"
+        },
+        {
+          "value": "cognac",
+          "label": "Коньяк"
+        },
+        {
+          "value": "vodka",
+          "label": "Водка"
+        }
+      ]
+    }
+  ]
+}
