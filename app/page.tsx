@@ -7,11 +7,16 @@ import { Friends } from "@/components/shared/Friends";
 import { Place } from "@/components/shared/Place";
 import { EventPlan } from "@/components/shared/EventPlan";
 import { Form } from "@/components/shared/Form";
+import { Details } from "@/components/shared/Details";
 
 export default function Home() {
   return (
     <Wrapper>
-      <Header wifeName="Полина" husbandName="Никита" date="20 июля 2026 года" />
+      <Header
+        wifeName={appConfig.shared.wifeName}
+        husbandName={appConfig.shared.husbandName}
+        date={appConfig.shared.textDate}
+      />
       <main>
         <Friends
           kindWordsForGuests={[
@@ -23,9 +28,12 @@ export default function Home() {
         <DressCode dresscode={appConfig.dresscode} />
         <Place places={appConfig.places} />
         <EventPlan eventPlan={appConfig.timings} />
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/*@ts-ignore*/}
         <Form formData={appConfig.form} />
-        <Footer />
+        <Details details={appConfig.details} />
       </main>
+      <Footer date={appConfig.shared.date} />
     </Wrapper>
   );
 }

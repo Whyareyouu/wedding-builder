@@ -2,7 +2,8 @@
   "shared": {
     "date": "20.06.2026",
     "wifeName": "Полина",
-    "husbandName": "Никита"
+    "husbandName": "Никита",
+    "textDate":"20 июля 2026 года"
   },
   "friends": {
     "withoutNames": false,

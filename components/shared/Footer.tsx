@@ -5,7 +5,11 @@ import { useMemo } from "react";
 import { CountdownTimer } from "@/components/shared/Timer";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 
-export const Footer = () => {
+type FooterProps = {
+  date: string;
+};
+
+export const Footer = ({ date }: FooterProps) => {
   const searchParams = useSearchParams();
 
   const male = searchParams.get("male");
@@ -28,7 +32,7 @@ export const Footer = () => {
           До встречи{friends}
         </Typography>
       </div>
-      <CountdownTimer date="20.06.2026" />
+      <CountdownTimer date={date} />
     </SectionWrapper>
   );
 };

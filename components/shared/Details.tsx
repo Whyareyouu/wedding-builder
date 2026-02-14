@@ -8,10 +8,12 @@ type DetailsProps = {
 export const Details = ({ details }: DetailsProps) => {
   return (
     <SectionWrapper>
-      <Typography fontSize="title">Детали</Typography>
-      <div className="flex flex-col">
+      <Typography fontSize="title" font="GreatVibes">
+        Детали
+      </Typography>
+      <div className="flex flex-col gap-4">
         {details.map((detail, index) => (
-          <Typography fontSize="xxl" key={index}>
+          <Typography fontSize="xxl" key={index} font="Cormorant">
             {detail}
           </Typography>
         ))}
