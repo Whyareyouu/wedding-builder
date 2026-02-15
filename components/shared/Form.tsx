@@ -10,42 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Typography } from "@/components/ui/Typography";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-
-type Field = {
-  label: string;
-  name: string;
-};
-
-type SimpleFieldTypes = "input" | "textarea";
-type GroupFieldTypes = "radio_group" | "checkbox_group";
-
-type FieldTypes = SimpleFieldTypes | GroupFieldTypes;
-
-type SimpleField = Field & {
-  type: SimpleFieldTypes;
-  defaultValue?: string;
-  required?: boolean;
-  placeholder?: string;
-};
-
-type CheckboxGroupField = {
-  type: Extract<FieldTypes, "checkbox_group">;
-  required?: boolean;
-  groupTitle: string;
-  name: string;
-  fields: { value: string; label: string }[];
-};
-
-type RadioGroupField = {
-  type: Extract<FieldTypes, "radio_group">;
-  groupTitle: string;
-  required?: boolean;
-  name: string;
-  defaultValue?: string;
-  fields: { value: string; label: string }[];
-};
-
-type FormStructure = SimpleField | CheckboxGroupField | RadioGroupField;
+import { FormStructure, ICheckboxGroupField, IRadioGroupField, ISimpleField } from "@/types/blocks/form";
 
 type FormProps = {
   formData: FormStructure[];
@@ -62,7 +27,7 @@ const CustomFieldLabel = ({ name, label, error }: { name: string; label: string;
 };
 
 export const Form = ({ formData }: FormProps) => {
-  const { handleSubmit, register, control } = useForm({});
+  const { handleSubmit, control } = useForm();
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -73,7 +38,7 @@ export const Form = ({ formData }: FormProps) => {
   const renderForm = (metaFormField: FormStructure) => {
     switch (metaFormField.type) {
       case "radio_group": {
-        const typedMetaField = metaFormField as RadioGroupField;
+        const typedMetaField = metaFormField as IRadioGroupField;
         return (
           <Controller
             defaultValue={metaFormField?.defaultValue}
@@ -83,11 +48,7 @@ export const Form = ({ formData }: FormProps) => {
             rules={{ required: metaFormField.required }}
             render={({ field: { onChange, value }, fieldState }) => (
               <RadioGroup onValueChange={onChange} value={value}>
-                <CustomFieldLabel
-                  name={typedMetaField.name}
-                  label={typedMetaField.groupTitle}
-                  error={fieldState.invalid}
-                />
+                <CustomFieldLabel name={typedMetaField.name} label={typedMetaField.label} error={fieldState.invalid} />
                 {typedMetaField.fields.map((field) => (
                   <Field
                     key={field.value}
@@ -109,7 +70,7 @@ export const Form = ({ formData }: FormProps) => {
         );
       }
       case "checkbox_group": {
-        const typedMetaField = metaFormField as CheckboxGroupField;
+        const typedMetaField = metaFormField as ICheckboxGroupField;
         return (
           <Controller
             name={typedMetaField.name}
@@ -119,11 +80,7 @@ export const Form = ({ formData }: FormProps) => {
             defaultValue={[]}
             render={({ field: { onChange, value }, fieldState }) => (
               <FieldGroup className="gap-0">
-                <CustomFieldLabel
-                  name={typedMetaField.name}
-                  label={typedMetaField.groupTitle}
-                  error={fieldState.invalid}
-                />
+                <CustomFieldLabel name={typedMetaField.name} label={typedMetaField.label} error={fieldState.invalid} />
                 <FieldSet data-invalid={fieldState.invalid}>
                   <FieldGroup data-slot="checkbox-group" style={{ gap: 0 }}>
                     {typedMetaField.fields.map((field) => (
@@ -156,7 +113,7 @@ export const Form = ({ formData }: FormProps) => {
         );
       }
       case "input": {
-        const typedMetaField = metaFormField as SimpleField;
+        const typedMetaField = metaFormField as ISimpleField;
         return (
           <Controller
             control={control}
@@ -183,7 +140,7 @@ export const Form = ({ formData }: FormProps) => {
         );
       }
       case "textarea": {
-        const typedMetaField = metaFormField as SimpleField;
+        const typedMetaField = metaFormField as ISimpleField;
         return (
           <Controller
             control={control}
@@ -212,7 +169,10 @@ export const Form = ({ formData }: FormProps) => {
 
   return (
     <SectionWrapper>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <Typography font="GreatVibes" fontSize="title">
+        Анкета
+      </Typography>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
         {formData.map((formField) => renderForm(formField))}
         <Button type="submit" variant="default" className="rounded-3xl max-w-72 w-full self-center py-8">
           <Typography font="Cormorant" fontSize="xxl">

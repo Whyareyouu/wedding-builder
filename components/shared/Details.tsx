@@ -2,17 +2,20 @@ import { Typography } from "@/components/ui/Typography";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 
 type DetailsProps = {
-  details: string[];
+  details: {
+    messages: string[];
+    title: string;
+  };
 };
 
 export const Details = ({ details }: DetailsProps) => {
   return (
     <SectionWrapper>
       <Typography fontSize="title" font="GreatVibes">
-        Детали
+        {details.title}
       </Typography>
       <div className="flex flex-col gap-4">
-        {details.map((detail, index) => (
+        {details?.messages?.map((detail, index) => (
           <Typography fontSize="xxl" key={index} font="Cormorant">
             {detail}
           </Typography>
