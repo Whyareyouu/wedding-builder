@@ -16,6 +16,36 @@ type FormProps = {
   formData: FormStructure[];
 };
 
+const transformData = (formMetadata: FormStructure[], data: Record<string, unknown>) => {
+  const result: Record<string, unknown> = {};
+
+  for (const field of formMetadata) {
+    if (field?.type === "input") {
+      result[field.name] = data?.[field.name] || null;
+    }
+
+    if (field?.type === "radio_group") {
+      const selected = field.fields.find((item) => item.value === data[field.name]);
+      result[field.name] = selected ? selected.label : null;
+    }
+
+    if (field.type === "checkbox_group") {
+      if (!Array.isArray(data[field.name])) {
+        result[field.name] = [];
+        continue;
+      }
+
+      const mapped = field.fields
+        .filter((item) => (data[field.name] as unknown[]).includes(item.value))
+        .map((item) => item.label);
+
+      result[field.name] = mapped;
+    }
+  }
+
+  return result;
+};
+
 const CustomFieldLabel = ({ name, label, error }: { name: string; label: string; error?: boolean }) => {
   return (
     <FieldLabel htmlFor={name}>
@@ -29,10 +59,20 @@ const CustomFieldLabel = ({ name, label, error }: { name: string; label: string;
 export const Form = ({ formData }: FormProps) => {
   const { handleSubmit, control } = useForm();
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const onSubmit = (data) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     console.log(data);
+
+    const mappedData = transformData(formData, data);
+
+    const response = await fetch("api/sheets", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mappedData),
+    });
+
+    console.log(response);
   };
 
   const renderForm = (metaFormField: FormStructure) => {
