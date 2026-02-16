@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💍 Свадебное приглашение (Полина и Никита)
 
-## Getting Started
+Привет! Это инструкция к вашему сайту-приглашению. Я постарался написать её так, чтобы можно было запустить и отредактировать сайт, даже если вы никогда раньше не программировали.
 
-First, run the development server:
+Этот сайт написан на современной технологии **Next.js**.
 
+---
+
+## 🚀 Шаг 1. Подготовка (делается один раз)
+
+Прежде чем начать, нужно установить две программы, чтобы компьютер мог работать с кодом.
+
+1.  **Скачайте и установите Node.js** (это "движок" для сайта).
+    * Перейдите на [официальный сайт](https://nodejs.org/).
+    * Скачайте версию **LTS** (Recommended for most users).
+    * Установите её, нажимая "Далее" (Next) во всех окнах.
+2. Проверьте установку:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+    npm -v
+    node -v
 ```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 Шаг 2. Запуск сайта у себя на компьютере
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  Откройте папку с проектом.
+2.  Нажмите правой кнопкой мыши в пустом месте папки и выберите **"Open in Terminal"** (или "Открыть в терминале"). Если такой опции нет, откройте VS Code, перетащите туда папку проекта, и в верхнем меню выберите `Terminal -> New Terminal`.
+3.  В появившемся черном окне введите команду для установки всех библиотек (это займет минуту):
+    ```bash
+    npm install
+    ```
+4.  Когда установка закончится, запустите сайт командой:
+    ```bash
+    npm run dev
+    ```
+5.  Вы увидите надпись вроде `Ready in ... ms`. Теперь откройте браузер и перейдите по адресу:
+    👉 **http://localhost:3000**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ура! Сайт работает локально.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📝 Шаг 3. Как менять текст и настройки
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Вся конфигурируемая информация на сайте (имена, даты, карта, вопросы в анкете) хранится в одном главном файле config/app-config.json
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 1. Общие настройки (`shared`)
+Здесь меняются главные данные свадьбы.
+* `date`: Дата в формате 20.06.2026.
+* `wifeName` / `husbandName`: Имена жениха и невесты.
+* `textDate`: Дата текстом, которая будет красиво отображаться.
 
-## Deploy on Vercel
+### 2. Блоки сайта (`layout`)
+Сайт строится из блоков, которые идут друг за другом. У каждого блока есть `contentType` (тип блока) и `content` (содержимое).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### 📍 Место проведения (`PLACE`)
+Блок с картой.
+* `title`: Заголовок (например, "Торжественная церемония").
+* `address`: Адрес текстом.
+* `startTime`: Время начала.
+* `mapSettings`:
+    * `coordinates`: Координаты для карты [широта, долгота]. Их можно взять на Яндекс.Картах (кликнуть правой кнопкой "Что здесь?").
+    * `yandexMapUrl`: Ссылка на Яндекс.Карты, чтобы гость мог построить маршрут.
+    * `hint`: Подсказка при наведении на точку.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### 🕒 Тайминг (`TIMINGS`)
+Расписание дня.
+* `plan`: Список событий.
+    * `event`: Название (например, "Торт").
+    * `startTime`: Время.
+    * `icon`: Иконка события (путь к файлу).
+
+#### 👗 Дресскод (`DRESSCODE`)
+Палитра цветов для гостей.
+* `colorSchema`: Список цветов.
+    * `color`: Код цвета (например, `#FFD1DC`). Можно найти в гугле по запросу "color picker".
+    * `maleDressCodeImg` / `femaleDressCodeImg`: Картинки-примеры одежды.
+
+#### 📋 Анкета гостя (`FORM`)
+Опросник, который заполняют гости.
+* `type`: Тип поля (`input` - текстовое поле, `radio_group` - выбор одного варианта, `checkbox_group` - выбор нескольких).
+* `required`: `true` если поле обязательно для заполнения.
+* `label`: Сам вопрос (например, "Что будете пить?").
+* `fields`: Варианты ответов (для выбора).
+
+---
+
+## 🖼 Шаг 4. Где хранить картинки
+
+Все картинки должны лежать в папке **`public`**.
+
+Например, если в конфиге написано:
+`"markerIcon": "/images/Shelby.png"`
+
+Это значит, что файл `Shelby.png` должен лежать в папке `public/images/`.
+Просто закидывайте свои фото в эту папку и прописывайте пути к ним в конфиге.
+
+---
