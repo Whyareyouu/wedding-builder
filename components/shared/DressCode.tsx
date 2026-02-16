@@ -5,6 +5,7 @@ import { Typography } from "@/components/ui/Typography";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { IDressCode } from "@/types/blocks/dresscode";
 
 type ColorSchemaItem = {
   color: string;
@@ -13,10 +14,7 @@ type ColorSchemaItem = {
 };
 
 type DressCodeProps = {
-  dresscode: {
-    title: string;
-    colorSchema: ColorSchemaItem[];
-  };
+  dresscode: IDressCode;
 };
 
 export const DressCode = ({ dresscode }: DressCodeProps) => {
@@ -54,8 +52,10 @@ export const DressCode = ({ dresscode }: DressCodeProps) => {
             viewport={{ once: true }}
             whileHover={{ scale: 1.08 }}
             onClick={() => setSelectedColor((prev) => (item.color === prev?.color ? null : item))}
-            className={`relative rounded-2xl shadow-lg overflow-hidden cursor-pointer border-4 ${
-              item.color === selectedColor?.color ? "border-black" : "border-transparent"
+            className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 ${
+              item.color === selectedColor?.color
+                ? "ring-2 ring-[#C6A769] ring-offset-4 ring-offset-white shadow-xl"
+                : "ring-1 ring-transparent hover:ring-[#C6A769]/40"
             }`}
           >
             <div className="w-32 h-16 rounded-2xl" style={{ backgroundColor: item.color }} />
