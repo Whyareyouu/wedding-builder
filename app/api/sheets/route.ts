@@ -25,16 +25,6 @@ const auth = new GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
-console.log({
-  type: process.env.TYPE,
-  private_key: process.env.PRIVATE_KEY,
-  client_email: process.env.CLIENT_EMAIL,
-  client_id: process.env.CLIENT_ID,
-  universe_domain: process.env.UNIVERSE_DOMAIN,
-  SPREAD_SHEET_ID,
-  SHEET_NAME,
-});
-
 export async function POST(req: Request): Promise<Response> {
   try {
     const sheets = google.sheets({ version: "v4", auth });
