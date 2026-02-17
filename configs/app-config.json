@@ -193,5 +193,20 @@
         }
       ]
     }
-  ]
+  ],
+  "footer": {
+    "baseText": "До встречи",
+    "defaultWhenNoNames": "!",
+    "single": {
+      "base": "дорог",
+      "maleEnding": "ой",
+      "femaleEnding": "ая",
+      "template": ", {base}{ending} {name}!"
+    },
+    "plural": {
+      "text": "дорогие",
+      "separator": " & ",
+      "template": ", {text} {male}{separator}{female}!"
+    }
+  }
 }

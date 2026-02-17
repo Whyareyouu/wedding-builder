@@ -74,7 +74,7 @@ export const InviteBuilder = ({ config }: InviteBuilderProps) => {
           <Fragment key={index}>{renderContent(layout, config.shared)}</Fragment>
         ))}
       </main>
-      <Footer date={config.shared.date} />
+      <Footer date={config.shared.date} footerSettings={config?.footer} />
     </Wrapper>
   );
 };

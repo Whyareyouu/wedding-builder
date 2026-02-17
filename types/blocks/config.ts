@@ -3,6 +3,7 @@ import { IEvent } from "@/types/blocks/event";
 import { FormStructure } from "@/types/blocks/form";
 import { IPlace } from "@/types/blocks/place";
 import { IDetails } from "@/types/blocks/details";
+import { IFooter } from "@/types/blocks/footer";
 
 type ContentTypes = "FRIENDS" | "PLACE" | "TIMINGS" | "DETAILS" | "DRESSCODE" | "FORM" | "CALENDAR";
 
@@ -21,4 +22,5 @@ export interface IShared {
 export interface IConfigApp {
   layout: ILayout[];
   shared: IShared;
+  footer: IFooter;
 }
