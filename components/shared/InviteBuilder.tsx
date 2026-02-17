@@ -3,7 +3,7 @@ import { Wrapper } from "@/components/ui/Wrapper";
 import { IPlace } from "@/types/blocks/place";
 import { Place } from "@/components/shared/Place";
 import { IEvent } from "@/types/blocks/event";
-import { EventPlan } from "@/components/shared/EventPlan";
+import { EventPlan } from "@/components/EventPlan";
 import { Details } from "@/components/shared/Details";
 import { IDetails } from "@/types/blocks/details";
 import { IDressCode } from "@/types/blocks/dresscode";
@@ -29,7 +29,7 @@ const renderPlace = (content: IPlace[]) => {
 };
 
 const renderTimings = (content: IEvent) => {
-  return <EventPlan eventPlan={content} />;
+  return <EventPlan content={content} />;
 };
 
 const renderDetails = (content: IDetails) => {

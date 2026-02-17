@@ -1,3 +1,5 @@
+type CardType = "CARD" | "ROAD";
+
 interface IIcon {
   path: string;
   width: number;
@@ -13,5 +15,6 @@ interface IPlan {
 
 export interface IEvent {
   title: string;
+  type?: CardType;
   plan: IPlan[];
 }
