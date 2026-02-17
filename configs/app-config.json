@@ -3,7 +3,8 @@
     "date": "20.06.2026",
     "wifeName": "Полина",
     "husbandName": "Никита",
-    "textDate": "20 июля 2026 года"
+    "textDate": "20 июля 2026 года",
+    "backgroundImage": "/images/background.jpg"
   },
   "layout": [
     {
@@ -44,7 +45,7 @@
       "contentType": "TIMINGS",
       "content": {
         "title": "План дня",
-        "type": "CARD",
+        "type": "ROAD",
         "plan": [
           {
             "event": "Церемония",

@@ -17,6 +17,7 @@ export interface IShared {
   wifeName: string;
   husbandName: string;
   textDate: string;
+  backgroundImage?: string;
 }
 
 export interface IConfigApp {

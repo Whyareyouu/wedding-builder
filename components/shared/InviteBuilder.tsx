@@ -67,7 +67,7 @@ const renderContent = (layout: ILayout, shared: IShared) => {
 
 export const InviteBuilder = ({ config }: InviteBuilderProps) => {
   return (
-    <Wrapper>
+    <Wrapper backgroundImage={config.shared?.backgroundImage}>
       <Header wifeName={config.shared.wifeName} husbandName={config.shared.husbandName} date={config.shared.textDate} />
       <main>
         {config.layout.map((layout, index) => (
