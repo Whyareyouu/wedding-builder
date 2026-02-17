@@ -3,5 +3,5 @@ type Props = {
 };
 
 export const SectionWrapper = ({ children, className }: React.PropsWithChildren<Props>) => {
-  return <section className={`flex flex-col gap-16 pt-20 items-center ${className}`}>{children}</section>;
+  return <section className={`flex flex-col gap-16 pt-10 sm:pt-20 items-center ${className}`}>{children}</section>;
 };

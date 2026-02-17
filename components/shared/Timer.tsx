@@ -29,13 +29,19 @@ const TimeCircle = ({ value, max, label }: CircleProps) => {
   const strokeDashoffset = circumference - progress * circumference;
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="relative w-[100px] h-[100px]">
-        <svg height="100" width="100">
-          <circle stroke="#d6d6c2" fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx="50" cy="50" />
-
+    <div className="flex flex-col items-center gap-1.5">
+      <div className="relative w-[72px] h-[72px] sm:w-[100px] sm:h-[100px]">
+        <svg viewBox="0 0 100 100" className="w-full h-full">
           <circle
-            stroke="#5b6b2d"
+            stroke="hsl(var(--border))"
+            fill="transparent"
+            strokeWidth={stroke}
+            r={normalizedRadius}
+            cx="50"
+            cy="50"
+          />
+          <circle
+            stroke="hsl(var(--foreground))"
             fill="transparent"
             strokeWidth={stroke}
             strokeDasharray={circumference}
@@ -49,12 +55,12 @@ const TimeCircle = ({ value, max, label }: CircleProps) => {
           />
         </svg>
 
-        <div className="absolute inset-0 flex items-center justify-center text-2xl font-light text-[#5b6b2d]">
+        <div className="absolute inset-0 flex items-center justify-center text-lg sm:text-2xl font-light text-foreground">
           {value}
         </div>
       </div>
 
-      <span className="text-sm text-[#5b6b2d] tracking-wide uppercase">{label}</span>
+      <span className="text-xs sm:text-sm text-muted-foreground tracking-wide uppercase">{label}</span>
     </div>
   );
 };
@@ -93,7 +99,7 @@ export const CountdownTimer = ({ date }: Props) => {
   }, []);
 
   return (
-    <div className="flex gap-10 justify-center items-center">
+    <div className="flex gap-4 sm:gap-10 justify-center items-center">
       <TimeCircle value={timeLeft.days} max={365} label="дней" />
       <TimeCircle value={timeLeft.hours} max={24} label="часов" />
       <TimeCircle value={timeLeft.minutes} max={60} label="минут" />

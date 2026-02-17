@@ -17,7 +17,7 @@ export const Wrapper = ({ children, backgroundImage }: WrapperProps) => {
           : undefined
       }
     >
-      <div className="flex flex-col max-w-screen-md w-full mx-auto">{children}</div>
+      <div className="flex flex-col max-w-screen-md w-full mx-auto px-2 md:px-0">{children}</div>
     </div>
   );
 };

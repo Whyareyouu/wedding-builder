@@ -12,17 +12,17 @@ type RoadLayoutProps = {
 
 export const RoadLayout = ({ plan }: RoadLayoutProps) => {
   return (
-    <div className="flex flex-col items-center mt-16 gap-16">
+    <div className="flex flex-col items-center mt-8 gap-8 sm:gap-16 sm:mt-16">
       {plan.map((event, index) => (
         <motion.div
           key={index}
-          className="flex w-full items-start gap-8"
+          className="grid w-full items-start [grid-template-columns:auto_auto_1fr] sm:[grid-template-columns:1fr_auto_1fr]"
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: index * 0.2, ease: "easeOut" }}
           viewport={{ once: true, amount: 0.3 }}
         >
-          <div className="flex-1 flex justify-end pr-4">
+          <div className="flex justify-end pr-3 sm:pr-6">
             <Typography fontSize="xxl" font="GreatVibes">
               {event.startTime}
             </Typography>
@@ -36,10 +36,12 @@ export const RoadLayout = ({ plan }: RoadLayoutProps) => {
               <Image src={event.icon.path} alt={event.event} width={event.icon.width} height={event.icon.height} />
             </motion.div>
 
-            {plan.length - 1 !== index && <Separator orientation="vertical" className="h-[80px] w-[2px] mt-2" />}
+            {plan.length - 1 !== index && (
+              <Separator orientation="vertical" className="h-[60px] sm:h-[80px] w-[2px] mt-2" />
+            )}
           </div>
 
-          <div className="flex-1 flex justify-start pl-4 flex-col gap-2">
+          <div className="flex justify-start pl-3 sm:pl-6 flex-col gap-1 sm:gap-2">
             <Typography fontSize="xxl" className="text-wrap" font="GreatVibes">
               {event.event}
             </Typography>
