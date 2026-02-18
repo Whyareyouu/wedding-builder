@@ -7,6 +7,7 @@ import { IEvent } from "@/types/blocks/event";
 import { useMemo } from "react";
 import { RoadLayout } from "@/components/EventPlan/ui/RoadLayout";
 import { CardLayout } from "@/components/EventPlan/ui/CardLayout";
+import { TimelineLayout } from "@/components/EventPlan/ui/TimeLineLayout";
 
 type EventPlanProps = {
   content: IEvent;
@@ -17,6 +18,8 @@ export const EventPlan = ({ content }: EventPlanProps) => {
     switch (content?.type) {
       case "CARD":
         return <CardLayout plan={content.plan} />;
+      case "TIME_LINE":
+        return <TimelineLayout plan={content.plan} />;
       default:
         return <RoadLayout plan={content.plan} />;
     }

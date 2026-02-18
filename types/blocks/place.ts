@@ -1,3 +1,7 @@
+import { IImage } from "@/types/blocks/config";
+
+type PlaceTypes = "MAP" | "FRAME";
+
 interface IMapSettings {
   coordinates: number[];
   zoom?: number;
@@ -6,10 +10,23 @@ interface IMapSettings {
   yandexMapUrl?: string;
 }
 
-export interface IPlace {
+interface IFrame {
+  images: IImage[];
+  frameBorderColor: string;
+  frameIntervalMs: number;
+}
+
+export interface IPlaceSettings {
   title: string;
   address: string;
   startTime: string;
   dividerIcon?: string;
+  frameSettings: IFrame;
   mapSettings: IMapSettings;
+}
+
+export interface IPlace {
+  places: IPlaceSettings[];
+  type: PlaceTypes;
+  title?: string;
 }

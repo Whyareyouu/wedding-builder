@@ -1,4 +1,4 @@
-type CardType = "CARD" | "ROAD";
+type CardType = "CARD" | "ROAD" | "TIME_LINE";
 
 interface IIcon {
   path: string;
@@ -10,7 +10,8 @@ interface IPlan {
   event: string;
   description?: string;
   startTime: string;
-  icon: IIcon;
+  icon?: IIcon;
+  image?: IIcon;
 }
 
 export interface IEvent {

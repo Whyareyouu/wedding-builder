@@ -1,7 +1,7 @@
 import { IConfigApp, ILayout, IShared } from "@/types/blocks/config";
 import { Wrapper } from "@/components/ui/Wrapper";
 import { IPlace } from "@/types/blocks/place";
-import { Place } from "@/components/shared/Place";
+import { Place } from "@/components/Place";
 import { IEvent } from "@/types/blocks/event";
 import { EventPlan } from "@/components/EventPlan";
 import { Details } from "@/components/shared/Details";
@@ -24,8 +24,8 @@ const renderCalendar = (shared: IShared) => {
   return <Calendar targetDate={shared.date} />;
 };
 
-const renderPlace = (content: IPlace[]) => {
-  return <Place places={content} />;
+const renderPlace = (content: IPlace) => {
+  return <Place content={content} />;
 };
 
 const renderTimings = (content: IEvent) => {
@@ -57,7 +57,7 @@ const renderContent = (layout: ILayout, shared: IShared) => {
     case "CALENDAR":
       return renderCalendar(shared);
     case "PLACE":
-      return renderPlace(content as IPlace[]);
+      return renderPlace(content as IPlace);
     case "TIMINGS":
       return renderTimings(content as IEvent);
     default:

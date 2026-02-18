@@ -9,43 +9,47 @@
   "layout": [
     {
       "contentType": "PLACE",
-      "content": [
-        {
-          "title": "Торжественная церемония",
-          "address": "Октябрьская ул., 4, Старая Купавна",
-          "startTime": "14:00",
-          "dividerIcon": "icons/heart.svg",
-          "mapSettings": {
-            "coordinates": [
-              55.806953,
-              38.172350
-            ],
-            "hint": "Отдел № 1 Управления ЗАГС по Богородскому городскому округу и городскому округу Черноголовка, Октябрьская ул., 4, Старая Купавна",
-            "markerIcon": "/images/Shelby.png",
-            "yandexMapUrl": "https://yandex.ru/maps/-/CPU4V2yY"
+      "content": {
+        "title": "Локация",
+        "type": "MAP",
+        "places":[
+          {
+            "title": "Торжественная церемония",
+            "address": "Октябрьская ул., 4, Старая Купавна",
+            "startTime": "14:00",
+            "dividerIcon": "icons/heart.svg",
+            "mapSettings": {
+              "coordinates": [
+                55.806953,
+                38.172350
+              ],
+              "hint": "Отдел № 1 Управления ЗАГС по Богородскому городскому округу и городскому округу Черноголовка, Октябрьская ул., 4, Старая Купавна",
+              "markerIcon": "/images/Shelby.png",
+              "yandexMapUrl": "https://yandex.ru/maps/-/CPU4V2yY"
+            }
+          },
+          {
+            "title": "Праздничный банкет",
+            "address": "ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
+            "startTime": "16:00",
+            "mapSettings": {
+              "coordinates": [
+                55.772403,
+                37.923159
+              ],
+              "hint": "Загородный клуб Дольче \n ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
+              "markerIcon": "/images/Shelby.png",
+              "yandexMapUrl": "https://yandex.ru/maps/-/CPU4ZQKi"
+            }
           }
-        },
-        {
-          "title": "Праздничный банкет",
-          "address": "ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
-          "startTime": "16:00",
-          "mapSettings": {
-            "coordinates": [
-              55.772403,
-              37.923159
-            ],
-            "hint": "Загородный клуб Дольче \n ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
-            "markerIcon": "/images/Shelby.png",
-            "yandexMapUrl": "https://yandex.ru/maps/-/CPU4ZQKi"
-          }
-        }
-      ]
+          ]
+      }
     },
     {
       "contentType": "TIMINGS",
       "content": {
         "title": "План дня",
-        "type": "ROAD",
+        "type": "TIME_LINE",
         "plan": [
           {
             "event": "Церемония",

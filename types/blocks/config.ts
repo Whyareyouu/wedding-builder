@@ -9,7 +9,13 @@ type ContentTypes = "FRIENDS" | "PLACE" | "TIMINGS" | "DETAILS" | "DRESSCODE" | 
 
 export interface ILayout {
   contentType: ContentTypes;
-  content: IDressCode | IEvent | FormStructure[] | IPlace[] | IDetails;
+  content: IDressCode | IEvent | FormStructure[] | IPlace | IDetails;
+}
+
+export interface IImage {
+  path: string;
+  width: number;
+  height: number;
 }
 
 export interface IShared {

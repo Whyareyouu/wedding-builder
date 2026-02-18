@@ -33,7 +33,7 @@ export const RoadLayout = ({ plan }: RoadLayoutProps) => {
               animate={{ rotate: [-2, 2, -2] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Image src={event.icon.path} alt={event.event} width={event.icon.width} height={event.icon.height} />
+              <Image src={event.icon!.path} alt={event.event} width={event.icon!.width} height={event.icon!.height} />
             </motion.div>
 
             {plan.length - 1 !== index && (
