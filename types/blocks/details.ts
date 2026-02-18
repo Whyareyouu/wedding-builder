@@ -1,4 +1,8 @@
 export interface IDetails {
-  messages: string[];
+  details: {
+    detail: string;
+    title?: string;
+  }[];
+  align: "center" | "left" | "right";
   title: string;
 }

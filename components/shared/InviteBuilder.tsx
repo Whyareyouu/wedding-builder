@@ -35,7 +35,7 @@ const renderTimings = (content: IEvent) => {
 };
 
 const renderDetails = (content: IDetails) => {
-  return <Details details={content as IDetails} />;
+  return <Details content={content as IDetails} />;
 };
 
 const renderDresscode = (content: IDressCode) => {
