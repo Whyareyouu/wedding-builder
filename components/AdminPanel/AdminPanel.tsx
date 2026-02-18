@@ -6,9 +6,16 @@ import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-ki
 import { ILayout, ContentTypes } from "@/types/blocks/config";
 import { BlockPalette } from "./BlockPalette";
 import { Canvas } from "./Canvas";
+import { BlockEditor } from "./BlockEditor";
 import { Button } from "@/components/ui/button";
 
-type BlockWithId = ILayout & { id: string };
+type PlacedBlock = {
+  id: string;
+  type: ContentTypes;
+  props: Record<string, any>;
+};
+
+type BlockWithId = ILayout & { id: string; props?: Record<string, any> };
 
 const BLOCK_TYPES: { type: ContentTypes; label: string }[] = [
   { type: "PLACE", label: "Место" },
@@ -60,9 +67,15 @@ const createDefaultContent = (contentType: ContentTypes) => {
   }
 };
 
+const createDefaultProps = (contentType: ContentTypes): Record<string, any> => {
+  const content = createDefaultContent(contentType);
+  return content as Record<string, any>;
+};
+
 export const AdminPanel = () => {
   const [blocks, setBlocks] = useState<BlockWithId[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -89,20 +102,24 @@ export const AdminPanel = () => {
     // Если перетаскиваем из палитры на холст (canvas)
     if (activeId.startsWith("palette-") && overId === "canvas") {
       const contentType = activeId.replace("palette-", "") as ContentTypes;
+      const defaultContent = createDefaultContent(contentType);
       const newBlock: BlockWithId = {
         contentType,
-        content: createDefaultContent(contentType),
+        content: defaultContent,
         id: `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        props: createDefaultProps(contentType),
       };
       setBlocks((prev) => [...prev, newBlock]);
     }
     // Если перетаскиваем из палитры на конкретный блок холста (вставка перед блоком)
     else if (activeId.startsWith("palette-") && overId.startsWith("block-")) {
       const contentType = activeId.replace("palette-", "") as ContentTypes;
+      const defaultContent = createDefaultContent(contentType);
       const newBlock: BlockWithId = {
         contentType,
-        content: createDefaultContent(contentType),
+        content: defaultContent,
         id: `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        props: createDefaultProps(contentType),
       };
       const overIndex = blocks.findIndex((b) => b.id === overId);
       if (overIndex !== -1) {
@@ -128,13 +145,37 @@ export const AdminPanel = () => {
 
   const handleRemoveBlock = (blockId: string) => {
     setBlocks((prev) => prev.filter((b) => b.id !== blockId));
+    if (selectedBlockId === blockId) {
+      setSelectedBlockId(null);
+    }
+  };
+
+  const handleBlockSelect = (blockId: string) => {
+    setSelectedBlockId(blockId);
+  };
+
+  const handleBlockSave = (blockId: string, props: Record<string, any> | any[]) => {
+    setBlocks((prev) =>
+      prev.map((block) => {
+        if (block.id === blockId) {
+          // Для FORM блока props это массив, для остальных - объект
+          const updatedContent = block.contentType === "FORM" ? (Array.isArray(props) ? props : []) : props;
+          return {
+            ...block,
+            props,
+            content: updatedContent as any, // Обновляем content для рендеринга
+          };
+        }
+        return block;
+      })
+    );
   };
 
   const handleSave = () => {
     const layoutData = blocks.map((block) => ({
       id: block.id,
       type: block.contentType,
-      props: block.content,
+      props: block.props || block.content,
     }));
     console.log(JSON.stringify(layoutData, null, 2));
   };
@@ -155,13 +196,36 @@ export const AdminPanel = () => {
         </div>
 
         <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="lg:col-span-1">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="lg:col-span-2">
               <BlockPalette blockTypes={BLOCK_TYPES} />
             </div>
 
-            <div className="lg:col-span-3">
-              <Canvas blocks={blocks} onRemoveBlock={handleRemoveBlock} />
+            <div className="lg:col-span-6">
+              <Canvas blocks={blocks} onRemoveBlock={handleRemoveBlock} onBlockSelect={handleBlockSelect} selectedBlockId={selectedBlockId} />
+            </div>
+
+            <div className="lg:col-span-4">
+              {selectedBlockId ? (
+                (() => {
+                  const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
+                  return selectedBlock ? (
+                    <BlockEditor
+                      block={{
+                        id: selectedBlock.id,
+                        type: selectedBlock.contentType,
+                        props: selectedBlock.props || (selectedBlock.content as Record<string, any>),
+                      }}
+                      onSave={handleBlockSave}
+                      onClose={() => setSelectedBlockId(null)}
+                    />
+                  ) : null;
+                })()
+              ) : (
+                <div className="bg-white rounded-lg border border-gray-200 p-6 text-center text-gray-400">
+                  <p>Выберите блок для редактирования</p>
+                </div>
+              )}
             </div>
           </div>
 

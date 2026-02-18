@@ -25,6 +25,8 @@ import { IShared } from "@/types/blocks/config";
 type CanvasProps = {
   blocks: (ILayout & { id: string })[];
   onRemoveBlock: (blockId: string) => void;
+  onBlockSelect: (blockId: string) => void;
+  selectedBlockId: string | null;
 };
 
 const defaultShared: IShared = {
@@ -60,9 +62,13 @@ const renderBlockContent = (layout: ILayout) => {
 const SortableBlock = ({
   block,
   onRemove,
+  onSelect,
+  isSelected,
 }: {
   block: ILayout & { id: string };
   onRemove: (blockId: string) => void;
+  onSelect: (blockId: string) => void;
+  isSelected: boolean;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: block.id,
@@ -76,7 +82,18 @@ const SortableBlock = ({
 
   return (
     <div ref={setNodeRef} style={style} className="relative group">
-      <Card className="p-4 mb-4">
+      <Card
+        className={`p-4 mb-4 cursor-pointer transition-all ${
+          isSelected ? "ring-2 ring-primary ring-offset-2" : ""
+        }`}
+        onClick={(e) => {
+          // Не выбираем блок, если клик был на кнопку удаления или grip
+          if ((e.target as HTMLElement).closest("button")) {
+            return;
+          }
+          onSelect(block.id);
+        }}
+      >
         <div className="flex items-start justify-between mb-2">
           <div className="flex items-center gap-2">
             <button
@@ -84,6 +101,7 @@ const SortableBlock = ({
               {...listeners}
               className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
               aria-label="Переместить блок"
+              onClick={(e) => e.stopPropagation()}
             >
               <GripVertical className="w-5 h-5" />
             </button>
@@ -92,7 +110,10 @@ const SortableBlock = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onRemove(block.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove(block.id);
+            }}
             className="opacity-0 group-hover:opacity-100 transition-opacity"
             aria-label="Удалить блок"
           >
@@ -105,7 +126,7 @@ const SortableBlock = ({
   );
 };
 
-export const Canvas = ({ blocks, onRemoveBlock }: CanvasProps) => {
+export const Canvas = ({ blocks, onRemoveBlock, onBlockSelect, selectedBlockId }: CanvasProps) => {
   const { setNodeRef, isOver } = useDroppable({
     id: "canvas",
   });
@@ -129,7 +150,13 @@ export const Canvas = ({ blocks, onRemoveBlock }: CanvasProps) => {
         ) : (
           <SortableContext items={blockIds} strategy={verticalListSortingStrategy}>
             {blocks.map((block) => (
-              <SortableBlock key={block.id} block={block} onRemove={onRemoveBlock} />
+              <SortableBlock
+                key={block.id}
+                block={block}
+                onRemove={onRemoveBlock}
+                onSelect={onBlockSelect}
+                isSelected={selectedBlockId === block.id}
+              />
             ))}
           </SortableContext>
         )}
