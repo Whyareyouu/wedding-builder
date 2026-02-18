@@ -34,7 +34,7 @@ export const Place = ({ content }: PlaceProps) => {
             return (
               <MapPlace
                 place={place}
-                isRight={index % 2 === 0}
+                isRight={index % 2 !== 0}
                 isLastElement={content.places.length - 1 === index}
                 key={index}
               />
