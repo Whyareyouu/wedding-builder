@@ -6,7 +6,7 @@ import { IDetails } from "@/types/blocks/details";
 import { IFooter } from "@/types/blocks/footer";
 import { IFrame } from "@/types/blocks/frame";
 
-type ContentTypes = "FRIENDS" | "PLACE" | "TIMINGS" | "DETAILS" | "DRESSCODE" | "FORM" | "CALENDAR" | "FRAME";
+export type ContentTypes = "FRIENDS" | "PLACE" | "TIMINGS" | "DETAILS" | "DRESSCODE" | "FORM" | "CALENDAR" | "FRAME";
 
 export interface ILayout {
   contentType: ContentTypes;

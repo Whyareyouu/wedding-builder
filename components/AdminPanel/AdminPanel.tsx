@@ -1,13 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
 import { ILayout, ContentTypes } from "@/types/blocks/config";
 import { BlockPalette } from "./BlockPalette";
 import { Canvas } from "./Canvas";
 import { BlockEditor } from "./BlockEditor";
 import { Button } from "@/components/ui/button";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 
 type PlacedBlock = {
   id: string;
@@ -55,7 +64,7 @@ const createDefaultContent = (contentType: ContentTypes) => {
     case "FORM":
       return [];
     case "CALENDAR":
-      return {};
+      return {} as any; // CALENDAR не имеет content, используется только для рендеринга
     case "FRAME":
       return {
         images: [],
@@ -75,13 +84,14 @@ const createDefaultProps = (contentType: ContentTypes): Record<string, any> => {
 export const AdminPanel = () => {
   const [blocks, setBlocks] = useState<BlockWithId[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [editingBlock, setEditingBlock] = useState<PlacedBlock | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8,
       },
-    })
+    }),
   );
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -145,13 +155,22 @@ export const AdminPanel = () => {
 
   const handleRemoveBlock = (blockId: string) => {
     setBlocks((prev) => prev.filter((b) => b.id !== blockId));
-    if (selectedBlockId === blockId) {
-      setSelectedBlockId(null);
+    if (editingBlock?.id === blockId) {
+      setDrawerOpen(false);
+      setEditingBlock(null);
     }
   };
 
-  const handleBlockSelect = (blockId: string) => {
-    setSelectedBlockId(blockId);
+  const handleBlockEdit = (blockId: string) => {
+    const block = blocks.find((b) => b.id === blockId);
+    if (block) {
+      setEditingBlock({
+        id: block.id,
+        type: block.contentType,
+        props: block.props || (block.content as Record<string, any>),
+      });
+      setDrawerOpen(true);
+    }
   };
 
   const handleBlockSave = (blockId: string, props: Record<string, any> | any[]) => {
@@ -160,14 +179,23 @@ export const AdminPanel = () => {
         if (block.id === blockId) {
           // Для FORM блока props это массив, для остальных - объект
           const updatedContent = block.contentType === "FORM" ? (Array.isArray(props) ? props : []) : props;
-          return {
+          const updatedBlock = {
             ...block,
             props,
             content: updatedContent as any, // Обновляем content для рендеринга
           };
+          // Обновляем editingBlock если он редактируется
+          if (editingBlock?.id === blockId) {
+            setEditingBlock({
+              id: updatedBlock.id,
+              type: updatedBlock.contentType,
+              props: updatedBlock.props || (updatedBlock.content as Record<string, any>),
+            });
+          }
+          return updatedBlock;
         }
         return block;
-      })
+      }),
     );
   };
 
@@ -196,36 +224,13 @@ export const AdminPanel = () => {
         </div>
 
         <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-1">
               <BlockPalette blockTypes={BLOCK_TYPES} />
             </div>
 
-            <div className="lg:col-span-6">
-              <Canvas blocks={blocks} onRemoveBlock={handleRemoveBlock} onBlockSelect={handleBlockSelect} selectedBlockId={selectedBlockId} />
-            </div>
-
-            <div className="lg:col-span-4">
-              {selectedBlockId ? (
-                (() => {
-                  const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
-                  return selectedBlock ? (
-                    <BlockEditor
-                      block={{
-                        id: selectedBlock.id,
-                        type: selectedBlock.contentType,
-                        props: selectedBlock.props || (selectedBlock.content as Record<string, any>),
-                      }}
-                      onSave={handleBlockSave}
-                      onClose={() => setSelectedBlockId(null)}
-                    />
-                  ) : null;
-                })()
-              ) : (
-                <div className="bg-white rounded-lg border border-gray-200 p-6 text-center text-gray-400">
-                  <p>Выберите блок для редактирования</p>
-                </div>
-              )}
+            <div className="lg:col-span-3">
+              <Canvas blocks={blocks} onRemoveBlock={handleRemoveBlock} onBlockEdit={handleBlockEdit} />
             </div>
           </div>
 
@@ -241,8 +246,29 @@ export const AdminPanel = () => {
             ) : null}
           </DragOverlay>
         </DndContext>
+
+        <Drawer
+          open={drawerOpen}
+          onOpenChange={(open) => {
+            setDrawerOpen(open);
+            if (!open) {
+              // Сбрасываем editingBlock при закрытии
+              setEditingBlock(null);
+            }
+          }}
+        >
+          <DrawerContent className="max-h-[90vh] overflow-y-auto">
+            {editingBlock && (
+              <BlockEditor
+                key={editingBlock.id}
+                block={editingBlock}
+                onSave={handleBlockSave}
+                onClose={() => setDrawerOpen(false)}
+              />
+            )}
+          </DrawerContent>
+        </Drawer>
       </div>
     </div>
   );
 };
-

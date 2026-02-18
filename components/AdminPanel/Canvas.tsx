@@ -6,7 +6,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { ILayout } from "@/types/blocks/config";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trash2, GripVertical } from "lucide-react";
+import { Trash2, GripVertical, Pencil } from "lucide-react";
 import { Place } from "@/components/Place";
 import { EventPlan } from "@/components/EventPlan";
 import { Details } from "@/components/shared/Details";
@@ -25,8 +25,7 @@ import { IShared } from "@/types/blocks/config";
 type CanvasProps = {
   blocks: (ILayout & { id: string })[];
   onRemoveBlock: (blockId: string) => void;
-  onBlockSelect: (blockId: string) => void;
-  selectedBlockId: string | null;
+  onBlockEdit: (blockId: string) => void;
 };
 
 const defaultShared: IShared = {
@@ -62,13 +61,11 @@ const renderBlockContent = (layout: ILayout) => {
 const SortableBlock = ({
   block,
   onRemove,
-  onSelect,
-  isSelected,
+  onEdit,
 }: {
   block: ILayout & { id: string };
   onRemove: (blockId: string) => void;
-  onSelect: (blockId: string) => void;
-  isSelected: boolean;
+  onEdit: (blockId: string) => void;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: block.id,
@@ -82,18 +79,21 @@ const SortableBlock = ({
 
   return (
     <div ref={setNodeRef} style={style} className="relative group">
-      <Card
-        className={`p-4 mb-4 cursor-pointer transition-all ${
-          isSelected ? "ring-2 ring-primary ring-offset-2" : ""
-        }`}
-        onClick={(e) => {
-          // Не выбираем блок, если клик был на кнопку удаления или grip
-          if ((e.target as HTMLElement).closest("button")) {
-            return;
-          }
-          onSelect(block.id);
-        }}
-      >
+      <Card className="p-4 mb-4">
+        {/* Иконка редактирования в правом верхнем углу */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(block.id);
+          }}
+          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+          aria-label="Редактировать блок"
+        >
+          <Pencil className="w-4 h-4 text-blue-500" />
+        </Button>
+
         <div className="flex items-start justify-between mb-2">
           <div className="flex items-center gap-2">
             <button
@@ -126,7 +126,7 @@ const SortableBlock = ({
   );
 };
 
-export const Canvas = ({ blocks, onRemoveBlock, onBlockSelect, selectedBlockId }: CanvasProps) => {
+export const Canvas = ({ blocks, onRemoveBlock, onBlockEdit }: CanvasProps) => {
   const { setNodeRef, isOver } = useDroppable({
     id: "canvas",
   });
@@ -150,13 +150,7 @@ export const Canvas = ({ blocks, onRemoveBlock, onBlockSelect, selectedBlockId }
         ) : (
           <SortableContext items={blockIds} strategy={verticalListSortingStrategy}>
             {blocks.map((block) => (
-              <SortableBlock
-                key={block.id}
-                block={block}
-                onRemove={onRemoveBlock}
-                onSelect={onBlockSelect}
-                isSelected={selectedBlockId === block.id}
-              />
+              <SortableBlock key={block.id} block={block} onRemove={onRemoveBlock} onEdit={onBlockEdit} />
             ))}
           </SortableContext>
         )}

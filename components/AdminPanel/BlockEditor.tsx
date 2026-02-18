@@ -9,8 +9,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Field, FieldContent, FieldLabel, FieldGroup } from "@/components/ui/field";
-import { X } from "lucide-react";
-import { useState } from "react";
 
 interface PlacedBlock {
   id: string;
@@ -21,7 +19,7 @@ interface PlacedBlock {
 interface BlockEditorProps {
   block: PlacedBlock;
   onSave: (id: string, props: Record<string, any> | any[]) => void;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
@@ -65,12 +63,9 @@ export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
   };
 
   return (
-    <Card className="p-6 h-full sticky top-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-6">
+      <div className="mb-6">
         <h3 className="text-lg font-semibold">Редактирование блока</h3>
-        <Button variant="ghost" size="sm" onClick={onClose} aria-label="Закрыть">
-          <X className="w-4 h-4" />
-        </Button>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -91,7 +86,7 @@ export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
           </Button>
         </div>
       </form>
-    </Card>
+    </div>
   );
 };
 
