@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Typography } from "@/components/ui/Typography";
 import { PhotoFrame } from "@/components/shared/PhotoFrame";
 import { Button } from "@/components/ui/button";
-import { IPlace, IPlaceSettings } from "@/types/blocks/place";
+import { IPlaceSettings } from "@/types/blocks/place";
 
 type CenteredPlaceProps = {
   place: IPlaceSettings;
@@ -14,7 +14,6 @@ type CenteredPlaceProps = {
 export const CenteredPlace = ({ place, numberOfElement }: CenteredPlaceProps) => {
   return (
     <motion.div
-      key={place.title}
       className="flex flex-col items-center gap-6 w-full"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -28,11 +27,7 @@ export const CenteredPlace = ({ place, numberOfElement }: CenteredPlaceProps) =>
         transition={{ duration: 0.9, ease: "easeOut", delay: numberOfElement * 0.15 + 0.1 }}
         viewport={{ once: true }}
       >
-        <PhotoFrame
-          images={place.frameSettings.images}
-          borderColor={place.frameSettings.frameBorderColor}
-          intervalMs={place.frameSettings.frameIntervalMs}
-        />
+        <PhotoFrame content={place.frameSettings} />
       </motion.div>
 
       <motion.div

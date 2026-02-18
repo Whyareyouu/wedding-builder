@@ -4,23 +4,24 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { IImage } from "@/types/blocks/config";
+import { IFrame } from "@/types/blocks/frame";
 
 type PhotoFrameProps = {
-  images: IImage[];
-  borderColor?: string;
-  intervalMs?: number;
+  content: IFrame;
 };
 
-export const PhotoFrame = ({ images, borderColor = "#4a5c3a", intervalMs = 4000 }: PhotoFrameProps) => {
+export const PhotoFrame = ({ content }: PhotoFrameProps) => {
+  const { images, frameBorderColor = "#4a5c3a", frameIntervalMs = 4000 } = content;
+
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (images.length <= 1) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
-    }, intervalMs);
+    }, frameIntervalMs);
     return () => clearInterval(timer);
-  }, [images.length, intervalMs]);
+  }, [images.length, frameIntervalMs]);
 
   const image = images[current];
 
@@ -29,7 +30,7 @@ export const PhotoFrame = ({ images, borderColor = "#4a5c3a", intervalMs = 4000 
       <div
         className="relative w-full h-full overflow-hidden"
         style={{
-          border: `4px solid ${borderColor}`,
+          border: `4px solid ${frameBorderColor}`,
           borderRadius: "4px",
         }}
       >

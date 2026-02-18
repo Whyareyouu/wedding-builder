@@ -15,6 +15,8 @@ import { Header } from "@/components/shared/Header";
 import { Footer } from "@/components/shared/Footer";
 import { Fragment } from "react";
 import { Calendar } from "@/components/shared/Calendar";
+import { IFrame } from "@/types/blocks/frame";
+import { PhotoFrame } from "@/components/shared/PhotoFrame";
 
 type InviteBuilderProps = {
   config: IConfigApp;
@@ -44,6 +46,10 @@ const renderForm = (content: FormStructure[]) => {
   return <Form formData={content} />;
 };
 
+const renderFrame = (content: IFrame) => {
+  return <PhotoFrame content={content} />;
+};
+
 const renderContent = (layout: ILayout, shared: IShared) => {
   const { content, contentType } = layout;
 
@@ -60,6 +66,8 @@ const renderContent = (layout: ILayout, shared: IShared) => {
       return renderPlace(content as IPlace);
     case "TIMINGS":
       return renderTimings(content as IEvent);
+    case "FRAME":
+      return renderFrame(content as IFrame);
     default:
       return null;
   }

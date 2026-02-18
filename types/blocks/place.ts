@@ -1,4 +1,4 @@
-import { IImage } from "@/types/blocks/config";
+import { IFrame } from "@/types/blocks/frame";
 
 type PlaceTypes = "MAP" | "FRAME";
 
@@ -8,12 +8,6 @@ interface IMapSettings {
   hint?: string;
   markerIcon?: string;
   yandexMapUrl?: string;
-}
-
-interface IFrame {
-  images: IImage[];
-  frameBorderColor: string;
-  frameIntervalMs: number;
 }
 
 export interface IPlaceSettings {

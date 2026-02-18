@@ -32,10 +32,15 @@ export const Place = ({ content }: PlaceProps) => {
         switch (content.type) {
           case "MAP":
             return (
-              <MapPlace place={place} isRight={index % 2 === 0} isLastElement={content.places.length - 1 === index} />
+              <MapPlace
+                place={place}
+                isRight={index % 2 === 0}
+                isLastElement={content.places.length - 1 === index}
+                key={index}
+              />
             );
           case "FRAME":
-            return <CenteredPlace place={place} numberOfElement={index} />;
+            return <CenteredPlace place={place} numberOfElement={index} key={index} />;
           default:
             return null;
         }

@@ -4,12 +4,13 @@ import { FormStructure } from "@/types/blocks/form";
 import { IPlace } from "@/types/blocks/place";
 import { IDetails } from "@/types/blocks/details";
 import { IFooter } from "@/types/blocks/footer";
+import { IFrame } from "@/types/blocks/frame";
 
-type ContentTypes = "FRIENDS" | "PLACE" | "TIMINGS" | "DETAILS" | "DRESSCODE" | "FORM" | "CALENDAR";
+type ContentTypes = "FRIENDS" | "PLACE" | "TIMINGS" | "DETAILS" | "DRESSCODE" | "FORM" | "CALENDAR" | "FRAME";
 
 export interface ILayout {
   contentType: ContentTypes;
-  content: IDressCode | IEvent | FormStructure[] | IPlace | IDetails;
+  content: IDressCode | IEvent | FormStructure[] | IPlace | IDetails | IFrame;
 }
 
 export interface IImage {
