@@ -2,6 +2,13 @@ import { IFrame } from "@/types/blocks/frame";
 
 type PlaceTypes = "MAP" | "FRAME";
 
+interface BasePlaceSettings {
+  title: string;
+  address: string;
+  startTime: string;
+  dividerIcon?: string;
+}
+
 interface IMapSettings {
   coordinates: number[];
   zoom?: number;
@@ -10,17 +17,19 @@ interface IMapSettings {
   yandexMapUrl?: string;
 }
 
-export interface IPlaceSettings {
-  title: string;
-  address: string;
-  startTime: string;
-  dividerIcon?: string;
-  frameSettings: IFrame;
+export interface IMapPlace extends BasePlaceSettings {
   mapSettings: IMapSettings;
 }
 
+export interface IFramePlace extends BasePlaceSettings {
+  frameSettings: IFrame;
+  mapSettings: Pick<IMapSettings, "yandexMapUrl">;
+}
+
+export type IPlaceSettings = IMapPlace | IFramePlace;
+
 export interface IPlace {
-  places: IPlaceSettings[];
-  type: PlaceTypes;
   title?: string;
+  type: PlaceTypes;
+  places: IPlaceSettings[];
 }

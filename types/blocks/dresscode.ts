@@ -1,4 +1,4 @@
-interface ColorSchemaItem {
+export interface ColorSchemaItem {
   color: string;
   maleDressCodeImg: string;
   femaleDressCodeImg: string;

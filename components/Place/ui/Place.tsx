@@ -5,7 +5,7 @@ import { Typography } from "@/components/ui/Typography";
 import { motion } from "framer-motion";
 
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { IPlace } from "@/types/blocks/place";
+import { IFramePlace, IMapPlace, IPlace } from "@/types/blocks/place";
 import { CenteredPlace } from "@/components/Place/ui/CenteredPlace";
 import { MapPlace } from "@/components/Place/ui/MapPlace";
 
@@ -33,14 +33,14 @@ export const Place = ({ content }: PlaceProps) => {
           case "MAP":
             return (
               <MapPlace
-                place={place}
+                place={place as IMapPlace}
                 isRight={index % 2 !== 0}
                 isLastElement={content.places.length - 1 === index}
                 key={index}
               />
             );
           case "FRAME":
-            return <CenteredPlace place={place} numberOfElement={index} key={index} />;
+            return <CenteredPlace place={place as IFramePlace} numberOfElement={index} key={index} />;
           default:
             return null;
         }

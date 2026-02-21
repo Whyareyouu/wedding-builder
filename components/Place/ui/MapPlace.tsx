@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/map";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { IPlaceSettings } from "@/types/blocks/place";
+import { IMapPlace, IPlaceSettings } from "@/types/blocks/place";
 
 type MapPlaceProps = {
-  place: IPlaceSettings;
+  place: IMapPlace;
   isRight: boolean;
   isLastElement: boolean;
 };
