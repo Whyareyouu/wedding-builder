@@ -248,16 +248,16 @@ export const AdminPanel = () => {
         </DndContext>
 
         <Drawer
+          direction="right"
           open={drawerOpen}
           onOpenChange={(open) => {
             setDrawerOpen(open);
             if (!open) {
-              // Сбрасываем editingBlock при закрытии
               setEditingBlock(null);
             }
           }}
         >
-          <DrawerContent className="max-h-[90vh] overflow-y-auto">
+          <DrawerContent>
             {editingBlock && (
               <BlockEditor
                 key={editingBlock.id}

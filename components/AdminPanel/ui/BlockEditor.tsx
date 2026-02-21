@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm, useFormContext } from "react-hook-form";
 import { ContentTypes } from "@/types/blocks/config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Field, FieldContent, FieldLabel, FieldGroup } from "@/components/ui/field";
+import { FormProvider } from "react-hook-form";
+import { DetailsContent } from "@/components/AdminPanel/ui/DetailsContent";
+import PlaceContent from "@/components/AdminPanel/ui/PlaceContent";
 
 interface PlacedBlock {
   id: string;
@@ -26,9 +29,11 @@ export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
   // Для FORM блока props это массив, для остальных - объект
   const defaultValues = block.type === "FORM" && Array.isArray(block.props) ? block.props : block.props;
 
-  const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
+  const methods = useForm({
     defaultValues,
   });
+
+  const { register, handleSubmit, watch, setValue, control, getValues } = methods;
 
   const onSubmit = (data: Record<string, any> | any[]) => {
     // Для FORM блока нужно получить весь массив через getValues()
@@ -44,11 +49,11 @@ export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
   const renderFormFields = () => {
     switch (block.type) {
       case "PLACE":
-        return <PlaceFormFields register={register} watch={watch} setValue={setValue} />;
+        return <PlaceContent />;
       case "TIMINGS":
         return <TimingsFormFields register={register} watch={watch} setValue={setValue} />;
       case "DETAILS":
-        return <DetailsFormFields register={register} watch={watch} setValue={setValue} />;
+        return <DetailsContent />;
       case "DRESSCODE":
         return <DressCodeFormFields register={register} watch={watch} setValue={setValue} />;
       case "FORM":
@@ -63,97 +68,32 @@ export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold">Редактирование блока</h3>
-      </div>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <FieldGroup>
-          <Field>
-            <FieldLabel>Тип блока</FieldLabel>
-            <FieldContent>
-              <Input value={block.type} disabled className="bg-gray-50" />
-            </FieldContent>
-          </Field>
-
-          {renderFormFields()}
-        </FieldGroup>
-
-        <div className="flex gap-2 pt-4 border-t">
-          <Button type="submit" className="flex-1">
-            Применить
-          </Button>
+    <FormProvider {...methods}>
+      <div className="p-6">
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold">Редактирование блока</h3>
         </div>
-      </form>
-    </div>
-  );
-};
 
-// Компоненты форм для каждого типа блока
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <FieldGroup>
+            <Field>
+              <FieldLabel>Тип блока</FieldLabel>
+              <FieldContent>
+                <Input value={block.type} disabled className="bg-gray-50" />
+              </FieldContent>
+            </Field>
 
-const PlaceFormFields = ({ register, watch, setValue }: any) => {
-  const places = watch("places") || [];
-  const title = watch("title") || "";
-  const type = watch("type") || "MAP";
+            {renderFormFields()}
+          </FieldGroup>
 
-  return (
-    <>
-      <Field>
-        <FieldLabel>Заголовок</FieldLabel>
-        <FieldContent>
-          <Input {...register("title")} placeholder="Локация" />
-        </FieldContent>
-      </Field>
-
-      <Field>
-        <FieldLabel>Тип</FieldLabel>
-        <FieldContent>
-          <select
-            {...register("type")}
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-          >
-            <option value="MAP">Карта</option>
-            <option value="FRAME">Рамка</option>
-          </select>
-        </FieldContent>
-      </Field>
-
-      <Field>
-        <FieldLabel>Места ({places.length})</FieldLabel>
-        <FieldContent>
-          <div className="space-y-4">
-            {places.map((place: any, index: number) => (
-              <Card key={index} className="p-4">
-                <div className="space-y-3">
-                  <Input {...register(`places.${index}.title`)} placeholder="Название места" />
-                  <Input {...register(`places.${index}.address`)} placeholder="Адрес" />
-                  <Input {...register(`places.${index}.startTime`)} placeholder="Время начала" />
-                  <Input {...register(`places.${index}.dividerIcon`)} placeholder="Иконка разделителя" />
-                  {type === "MAP" && (
-                    <>
-                      <Textarea {...register(`places.${index}.mapSettings.hint`)} placeholder="Подсказка на карте" />
-                      <Input {...register(`places.${index}.mapSettings.markerIcon`)} placeholder="Иконка маркера" />
-                      <Input {...register(`places.${index}.mapSettings.yandexMapUrl`)} placeholder="URL Яндекс карты" />
-                    </>
-                  )}
-                </div>
-              </Card>
-            ))}
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                const newPlaces = [...places, { title: "", address: "", startTime: "", mapSettings: {} }];
-                setValue("places", newPlaces);
-              }}
-            >
-              Добавить место
+          <div className="flex gap-2 pt-4 border-t">
+            <Button type="submit" className="flex-1">
+              Применить
             </Button>
           </div>
-        </FieldContent>
-      </Field>
-    </>
+        </form>
+      </div>
+    </FormProvider>
   );
 };
 
@@ -215,63 +155,6 @@ const TimingsFormFields = ({ register, watch, setValue }: any) => {
               }}
             >
               Добавить событие
-            </Button>
-          </div>
-        </FieldContent>
-      </Field>
-    </>
-  );
-};
-
-const DetailsFormFields = ({ register, watch, setValue }: any) => {
-  const details = watch("details") || [];
-  const title = watch("title") || "";
-  const align = watch("align") || "left";
-
-  return (
-    <>
-      <Field>
-        <FieldLabel>Заголовок</FieldLabel>
-        <FieldContent>
-          <Input {...register("title")} placeholder="Детали" />
-        </FieldContent>
-      </Field>
-
-      <Field>
-        <FieldLabel>Выравнивание</FieldLabel>
-        <FieldContent>
-          <select
-            {...register("align")}
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-          >
-            <option value="left">Слева</option>
-            <option value="center">По центру</option>
-            <option value="right">Справа</option>
-          </select>
-        </FieldContent>
-      </Field>
-
-      <Field>
-        <FieldLabel>Детали ({details.length})</FieldLabel>
-        <FieldContent>
-          <div className="space-y-4">
-            {details.map((detail: any, index: number) => (
-              <Card key={index} className="p-4">
-                <div className="space-y-3">
-                  <Input {...register(`details.${index}.title`)} placeholder="Заголовок детали (опционально)" />
-                  <Textarea {...register(`details.${index}.detail`)} placeholder="Текст детали" />
-                </div>
-              </Card>
-            ))}
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                const newDetails = [...details, { detail: "", title: "" }];
-                setValue("details", newDetails);
-              }}
-            >
-              Добавить деталь
             </Button>
           </div>
         </FieldContent>
