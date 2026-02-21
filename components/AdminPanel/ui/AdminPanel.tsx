@@ -11,7 +11,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { ILayout, ContentTypes, LayoutContent } from "@/types/blocks/config";
+import { ILayout, ContentTypes, LayoutContent, IShared } from "@/types/blocks/config";
 import { BlockPalette } from "./BlockPalette";
 import { Canvas } from "./Canvas";
 import { BlockEditor } from "./BlockEditor";
@@ -22,6 +22,11 @@ import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SaveModal } from "@/components/AdminPanel/ui/SaveModal";
 import { toast } from "sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FormProvider, useForm } from "react-hook-form";
+import { SharedContent } from "@/components/AdminPanel/ui/SharedContent";
+import { FooterContent } from "@/components/AdminPanel/ui/FooterContent";
+import { IFooter } from "@/types/blocks/footer";
 
 type PlacedBlock = {
   id: string;
@@ -52,6 +57,26 @@ const BLOCK_TYPES: { type: ContentTypes; label: string }[] = [
   { type: "CALENDAR", label: "Календарь" },
   { type: "FRAME", label: "Фото рамка" },
 ];
+
+const DEFAULT_SHARED: IShared = {
+  date: "",
+  wifeName: "",
+  husbandName: "",
+  textDate: "",
+  backgroundImage: "",
+};
+
+const DEFAULT_FOOTER: IFooter = {
+  baseText: "До встречи",
+  pairSeparator: " & ",
+  disableGenderEnding: false,
+  genderConfig: {
+    maleEnding: "ой",
+    femaleEnding: "ая",
+    pluralText: "дорогие",
+    singleBase: "дорог",
+  },
+};
 
 const createDefaultContent = (contentType: ContentTypes): LayoutContent => {
   switch (contentType) {
@@ -106,6 +131,9 @@ export const AdminPanel = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(NEW_LAYOUT_ID);
   const [isOpenSaveModal, setIsOpenSaveModal] = useState(false);
+
+  const sharedForm = useForm<IShared>({ defaultValues: DEFAULT_SHARED });
+  const footerForm = useForm<IFooter>({ defaultValues: DEFAULT_FOOTER });
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -245,7 +273,10 @@ export const AdminPanel = () => {
       content: block.props ?? block.content,
     }));
 
-    const payload = { ...data, content: { layout: layout } };
+    const payload = {
+      ...data,
+      content: { layout, shared: sharedForm.getValues(), footer: footerForm.getValues() },
+    };
     try {
       const res = await fetch("/api/layouts", {
         method: "POST",
@@ -306,29 +337,57 @@ export const AdminPanel = () => {
           </Button>
         </div>
 
-        <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="lg:col-span-1">
-              <BlockPalette blockTypes={BLOCK_TYPES} />
-            </div>
+        <Tabs defaultValue="canvas" className="mb-6">
+          <TabsList>
+            <TabsTrigger value="canvas">Блоки</TabsTrigger>
+            <TabsTrigger value="shared">Общие данные</TabsTrigger>
+            <TabsTrigger value="footer">Футер</TabsTrigger>
+          </TabsList>
 
-            <div className="lg:col-span-3">
-              <Canvas blocks={blocks} onRemoveBlock={handleRemoveBlock} onBlockEdit={handleBlockEdit} />
-            </div>
-          </div>
+          <TabsContent value="canvas">
+            <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div className="lg:col-span-1">
+                  <BlockPalette blockTypes={BLOCK_TYPES} />
+                </div>
 
-          <DragOverlay>
-            {activePaletteBlock ? (
-              <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-blue-500">
-                <div className="text-sm font-medium">{activePaletteBlock.label}</div>
+                <div className="lg:col-span-3">
+                  <Canvas blocks={blocks} onRemoveBlock={handleRemoveBlock} onBlockEdit={handleBlockEdit} />
+                </div>
               </div>
-            ) : activeCanvasBlock ? (
-              <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-blue-500">
-                <div className="text-sm font-medium">{activeCanvasBlock.contentType}</div>
-              </div>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
+
+              <DragOverlay>
+                {activePaletteBlock ? (
+                  <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-blue-500">
+                    <div className="text-sm font-medium">{activePaletteBlock.label}</div>
+                  </div>
+                ) : activeCanvasBlock ? (
+                  <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-blue-500">
+                    <div className="text-sm font-medium">{activeCanvasBlock.contentType}</div>
+                  </div>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+          </TabsContent>
+
+          <TabsContent value="shared">
+            <div className="bg-white rounded-lg p-6 border">
+              <h2 className="text-lg font-semibold mb-4">Общие настройки</h2>
+              <FormProvider {...sharedForm}>
+                <SharedContent />
+              </FormProvider>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="footer">
+            <div className="bg-white rounded-lg p-6 border">
+              <h2 className="text-lg font-semibold mb-4">Настройки футера</h2>
+              <FormProvider {...footerForm}>
+                <FooterContent />
+              </FormProvider>
+            </div>
+          </TabsContent>
+        </Tabs>
 
         <Drawer
           direction="right"
