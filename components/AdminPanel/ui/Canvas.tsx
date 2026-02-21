@@ -80,20 +80,6 @@ const SortableBlock = ({
   return (
     <div ref={setNodeRef} style={style} className="relative group">
       <Card className="p-4 mb-4">
-        {/* Иконка редактирования в правом верхнем углу */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            onEdit(block.id);
-          }}
-          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
-          aria-label="Редактировать блок"
-        >
-          <Pencil className="w-4 h-4 text-blue-500" />
-        </Button>
-
         <div className="flex items-start justify-between mb-2">
           <div className="flex items-center gap-2">
             <button
@@ -107,18 +93,32 @@ const SortableBlock = ({
             </button>
             <span className="text-xs font-medium text-gray-500 uppercase">{block.contentType}</span>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onRemove(block.id);
-            }}
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
-            aria-label="Удалить блок"
-          >
-            <Trash2 className="w-4 h-4 text-red-500" />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(block.id);
+              }}
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+              aria-label="Редактировать блок"
+            >
+              <Pencil className="w-4 h-4 text-blue-500" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove(block.id);
+              }}
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+              aria-label="Удалить блок"
+            >
+              <Trash2 className="w-4 h-4 text-red-500" />
+            </Button>
+          </div>
         </div>
         <div className="border-t pt-4">{renderBlockContent(block)}</div>
       </Card>
@@ -158,4 +158,3 @@ export const Canvas = ({ blocks, onRemoveBlock, onBlockEdit }: CanvasProps) => {
     </div>
   );
 };
-
