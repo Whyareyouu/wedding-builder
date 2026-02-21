@@ -67,7 +67,13 @@ const createDefaultContent = (contentType: ContentTypes) => {
       return {} as any; // CALENDAR не имеет content, используется только для рендеринга
     case "FRAME":
       return {
-        images: [],
+        images: [
+          {
+            path: "/system/placeholder.jpg",
+            width: 400,
+            height: 300,
+          },
+        ],
         frameBorderColor: "#000000",
         frameIntervalMs: 3000,
       };
@@ -257,7 +263,7 @@ export const AdminPanel = () => {
             }
           }}
         >
-          <DrawerContent>
+          <DrawerContent className="left-auto right-0 top-0 bottom-0 mt-0 max-w-[400px] w-full rounded-none flex flex-col overflow-x-hidden">
             {editingBlock && (
               <BlockEditor
                 key={editingBlock.id}

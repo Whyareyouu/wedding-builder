@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2 } from "lucide-react";
 
@@ -35,26 +35,31 @@ export const DetailsContent = () => {
           <Input {...register("title")} placeholder="Детали" />
         </FieldContent>
       </Field>
-
-      <Field>
-        <FieldLabel>Выравнивание</FieldLabel>
-        <FieldContent>
-          <Select defaultValue="center">
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {ALIGN_OPTIONS.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </FieldContent>
-      </Field>
+      <Controller
+        control={control}
+        name="align"
+        render={({ field: { value, onChange } }) => (
+          <Field>
+            <FieldLabel>Выравнивание</FieldLabel>
+            <FieldContent>
+              <Select defaultValue="center" value={value} onValueChange={onChange}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {ALIGN_OPTIONS.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </FieldContent>
+          </Field>
+        )}
+      />
 
       <Field>
         <FieldLabel>Детали ({fields.length})</FieldLabel>

@@ -20,7 +20,7 @@ const DEFAULT_PLACE = {
   dividerIcon: "",
 };
 
-const PlaceContent = () => {
+export const PlaceContent = () => {
   const { register, control } = useFormContext<IPlace>();
 
   const {
@@ -74,6 +74,7 @@ const PlaceContent = () => {
       />
 
       <Field>
+        <FieldLabel>Места ({places.length})</FieldLabel>
         <FieldContent>
           <div className="space-y-4">
             {places.map((place, index) => (
@@ -170,5 +171,3 @@ const FrameImages = ({ index }: { index: number }) => {
     </div>
   );
 };
-
-export default PlaceContent;
