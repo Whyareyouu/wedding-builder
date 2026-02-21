@@ -335,6 +335,7 @@ export const AdminPanel = () => {
       console.error(err);
       toast.error("Ошибка сохранения");
     }
+    setIsOpenSaveModal(false);
     console.log(JSON.stringify(layout, null, 2));
   };
 
