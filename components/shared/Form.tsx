@@ -2,7 +2,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
+import { Field, FieldContent, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Typography } from "@/components/ui/Typography";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { FormStructure, ICheckboxGroupField, IRadioGroupField, ISimpleField } from "@/types/blocks/form";
+import {
+  FormStructure,
+  ICheckboxGroupField,
+  IRadioGroupField,
+  ISelectGroupField,
+  ISimpleField,
+} from "@/types/blocks/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { InfoIcon } from "lucide-react";
 
 type FormProps = {
   formData: FormStructure[];
@@ -24,7 +33,7 @@ const transformData = (formMetadata: FormStructure[], data: Record<string, unkno
       result[field.name] = data?.[field.name] || null;
     }
 
-    if (field?.type === "radio_group") {
+    if (field?.type === "radio_group" || field?.type === "select") {
       const selected = field.fields.find((item) => item.value === data[field.name]);
       result[field.name] = selected ? selected.label : null;
     }
@@ -46,10 +55,32 @@ const transformData = (formMetadata: FormStructure[], data: Record<string, unkno
   return result;
 };
 
-const CustomFieldLabel = ({ name, label, error }: { name: string; label: string; error?: boolean }) => {
+const CustomFieldLabel = ({
+  name,
+  label,
+  error,
+  hint,
+}: {
+  name: string;
+  label: string;
+  error?: boolean;
+  hint?: string;
+}) => {
   return (
     <FieldLabel htmlFor={name}>
-      <Typography fontSize="xxl" font="Cormorant" className={error ? "text-black" : ""}>
+      {hint && (
+        <Tooltip>
+          <TooltipTrigger>
+            <InfoIcon />
+          </TooltipTrigger>
+          <TooltipContent>
+            <Typography font="Cormorant" fontSize="xl">
+              {hint}
+            </Typography>
+          </TooltipContent>
+        </Tooltip>
+      )}
+      <Typography fontSize="xxl" font="Cormorant" className={`${error ? "text-black" : ""}`}>
         {label}
       </Typography>
     </FieldLabel>
@@ -88,7 +119,12 @@ export const Form = ({ formData }: FormProps) => {
             rules={{ required: metaFormField.required }}
             render={({ field: { onChange, value }, fieldState }) => (
               <RadioGroup onValueChange={onChange} value={value}>
-                <CustomFieldLabel name={typedMetaField.name} label={typedMetaField.label} error={fieldState.invalid} />
+                <CustomFieldLabel
+                  name={typedMetaField.name}
+                  label={typedMetaField.label}
+                  error={fieldState.invalid}
+                  hint={typedMetaField?.hint}
+                />
                 {typedMetaField.fields.map((field) => (
                   <Field
                     key={field.value}
@@ -120,7 +156,12 @@ export const Form = ({ formData }: FormProps) => {
             defaultValue={[]}
             render={({ field: { onChange, value }, fieldState }) => (
               <FieldGroup className="gap-0">
-                <CustomFieldLabel name={typedMetaField.name} label={typedMetaField.label} error={fieldState.invalid} />
+                <CustomFieldLabel
+                  name={typedMetaField.name}
+                  label={typedMetaField.label}
+                  error={fieldState.invalid}
+                  hint={typedMetaField?.hint}
+                />
                 <FieldSet data-invalid={fieldState.invalid}>
                   <FieldGroup data-slot="checkbox-group" style={{ gap: 0 }}>
                     {typedMetaField.fields.map((field) => (
@@ -163,7 +204,12 @@ export const Form = ({ formData }: FormProps) => {
             rules={{ required: typedMetaField?.required }}
             render={({ fieldState, field }) => (
               <Field orientation="vertical" key={field.name} data-invalid={fieldState.invalid}>
-                <CustomFieldLabel name={typedMetaField.name} label={typedMetaField.label} error={fieldState.invalid} />
+                <CustomFieldLabel
+                  name={typedMetaField.name}
+                  label={typedMetaField.label}
+                  error={fieldState.invalid}
+                  hint={typedMetaField?.hint}
+                />
 
                 <Input
                   id={typedMetaField.name}
@@ -189,13 +235,54 @@ export const Form = ({ formData }: FormProps) => {
             rules={{ required: typedMetaField?.required }}
             render={({ fieldState, field }) => (
               <Field orientation="vertical" key={metaFormField.name} data-invalid={fieldState.invalid}>
-                <CustomFieldLabel name={typedMetaField.name} label={typedMetaField.label} error={fieldState.invalid} />
+                <CustomFieldLabel
+                  name={typedMetaField.name}
+                  label={typedMetaField.label}
+                  error={fieldState.invalid}
+                  hint={typedMetaField?.hint}
+                />
                 <Textarea
                   id={typedMetaField.name}
                   placeholder={typedMetaField?.placeholder || "Введите текст"}
                   aria-invalid={fieldState.invalid}
                   {...field}
                 />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+        );
+      }
+      case "select": {
+        const typedMetaField = metaFormField as ISelectGroupField;
+        return (
+          <Controller
+            name={typedMetaField.name}
+            control={control}
+            defaultValue={typedMetaField?.defaultValue}
+            render={({ field, fieldState }) => (
+              <Field orientation="responsive" data-invalid={fieldState.invalid}>
+                <FieldContent>
+                  <CustomFieldLabel
+                    name={typedMetaField.name}
+                    label={typedMetaField?.label}
+                    error={fieldState.invalid}
+                    hint={typedMetaField?.hint}
+                  />
+                </FieldContent>
+
+                <Select name={field.name} value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id={typedMetaField.name} aria-invalid={fieldState.invalid} className="min-w-[120px]">
+                    <SelectValue placeholder="Выберите из списка" />
+                  </SelectTrigger>
+                  <SelectContent position="item-aligned">
+                    {typedMetaField?.fields.map((item, index) => (
+                      <SelectItem key={index} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

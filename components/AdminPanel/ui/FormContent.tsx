@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Trash2 } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FormStructure, ICheckboxGroupField, IRadioGroupField, ISimpleField } from "@/types/blocks/form";
+import { Textarea } from "@/components/ui/textarea";
 
 export interface IFormBlock {
   fields: FormStructure[];
@@ -18,6 +19,7 @@ const FIELD_TYPES: { label: string; value: FormStructure["type"] }[] = [
   { label: "Многострочное поле", value: "textarea" },
   { label: "Группа радиокнопок", value: "radio_group" },
   { label: "Группа чекбоксов", value: "checkbox_group" },
+  { label: "Селект", value: "select" },
 ];
 
 const DEFAULT_SIMPLE_FIELD: ISimpleField = {
@@ -32,7 +34,7 @@ const DEFAULT_SIMPLE_FIELD: ISimpleField = {
 const DEFAULT_OPTION = { value: "", label: "" };
 
 const isGroupField = (field: FormStructure | undefined): field is ICheckboxGroupField | IRadioGroupField =>
-  field?.type === "radio_group" || field?.type === "checkbox_group";
+  field?.type === "radio_group" || field?.type === "checkbox_group" || field?.type === "select";
 
 const FieldOptions = ({ fieldIndex }: { fieldIndex: number }) => {
   const { control, register } = useFormContext<IFormBlock>();
@@ -144,6 +146,8 @@ export const FormContent = () => {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+
+                  <Textarea {...register(`fields.${index}.hint`)} placeholder="Подсказка" />
 
                   {/* Обязательное поле */}
                   <div className="flex items-center gap-2">
