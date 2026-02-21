@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server";
 import fsPromises from "fs/promises";
 import path from "path";
 
@@ -9,9 +8,9 @@ interface Template {
   [key: string]: unknown;
 }
 
-export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(req: Request, { params }: { params: { id: string } }): Promise<Response> {
   try {
-    const { id } = await context.params;
+    const { id } = params;
 
     const rawData = await fsPromises.readFile(DATA_FILE_PATH);
     const objectData: Template[] = JSON.parse(rawData.toString());
@@ -24,8 +23,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
 
     return Response.json({ success: true, data: found }, { status: 200 });
   } catch (error) {
-    console.error("GET /api/layouts/[id] error:", error);
-
+    console.error(`GET /api/templates/${params?.id ?? "unknown"} error:`, error);
     return Response.json({ success: false, message: "Не удалось загрузить шаблон" }, { status: 500 });
   }
 }
