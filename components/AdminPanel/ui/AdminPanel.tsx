@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -18,6 +18,10 @@ import { BlockEditor } from "./BlockEditor";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { FormStructure } from "@/types/blocks/form";
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SaveModal } from "@/components/AdminPanel/ui/SaveModal";
+import { toast } from "sonner";
 
 type PlacedBlock = {
   id: string;
@@ -30,6 +34,15 @@ type BlockWithId = Omit<ILayout, "content"> & {
   content: LayoutContent;
   props?: LayoutContent;
 };
+type Template = {
+  id: string;
+  title: string;
+  isActive: boolean;
+  content: unknown[]; // массив блоков с id
+};
+
+const NEW_LAYOUT_ID = "new_layout";
+
 const BLOCK_TYPES: { type: ContentTypes; label: string }[] = [
   { type: "PLACE", label: "Место" },
   { type: "TIMINGS", label: "План дня" },
@@ -89,6 +102,11 @@ export const AdminPanel = () => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingBlock, setEditingBlock] = useState<PlacedBlock | null>(null);
+
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(NEW_LAYOUT_ID);
+  const [isOpenSaveModal, setIsOpenSaveModal] = useState(false);
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -96,6 +114,26 @@ export const AdminPanel = () => {
       },
     }),
   );
+
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const res = await fetch("/api/layouts");
+        if (!res.ok) throw new Error("Не удалось загрузить шаблоны");
+        const data = await res.json();
+
+        const loadedTemplates = data.data ?? data ?? [];
+        setTemplates(loadedTemplates);
+
+        if (loadedTemplates.length > 0) {
+          setSelectedTemplateId(loadedTemplates[0].id);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchTemplates();
+  }, []);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -199,12 +237,32 @@ export const AdminPanel = () => {
     );
   };
 
-  const handleSave = () => {
-    const layoutData = blocks.map((block) => ({
+  const handleSave = async (data: Omit<Template, "content">) => {
+    console.log({ data, blocks });
+
+    const layout = blocks.map((block) => ({
       contentType: block.contentType,
       content: block.props ?? block.content,
     }));
-    console.log(JSON.stringify(layoutData, null, 2));
+
+    const payload = { ...data, content: { layout: layout } };
+    try {
+      const res = await fetch("/api/layouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error();
+
+      toast.success("Сохранено");
+
+      setTemplates((prev) => prev.map((t) => (t.id === selectedTemplateId ? { ...t, content: blocks } : t)));
+    } catch (err) {
+      console.error(err);
+      toast.error("Ошибка сохранения");
+    }
+    console.log(JSON.stringify(layout, null, 2));
   };
 
   const activePaletteBlock = activeId?.startsWith("palette-")
@@ -215,9 +273,35 @@ export const AdminPanel = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900">Админ-панель</h1>
-          <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
+        <div className="mb-6 flex justify-between items-start">
+          <div className="flex flex-col gap-4 max-w-[30%] w-full">
+            <h1 className="text-3xl font-bold text-gray-900 w-full">Админ-панель</h1>
+            <Field>
+              <FieldLabel>Активный шаблон</FieldLabel>
+              <FieldContent>
+                <Select
+                  value={selectedTemplateId}
+                  onValueChange={(value) => setSelectedTemplateId(value)}
+                  defaultValue={NEW_LAYOUT_ID}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите шаблон..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {templates.map((template) => (
+                        <SelectItem key={template.id} value={template.id}>
+                          {template.title}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value={NEW_LAYOUT_ID}>Новый шаблон</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FieldContent>
+            </Field>
+          </div>
+          <Button onClick={() => setIsOpenSaveModal(true)} className="bg-blue-600 hover:bg-blue-700">
             Сохранить
           </Button>
         </div>
@@ -268,6 +352,14 @@ export const AdminPanel = () => {
           </DrawerContent>
         </Drawer>
       </div>
+      {isOpenSaveModal && (
+        <SaveModal
+          isOpen={isOpenSaveModal}
+          onClose={() => setIsOpenSaveModal(false)}
+          handleSaveForm={handleSave}
+          defaultValues={(templates?.find((x) => x?.id === selectedTemplateId) as Omit<Template, "content">) ?? {}}
+        />
+      )}
     </div>
   );
 };
