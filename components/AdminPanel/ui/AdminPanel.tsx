@@ -11,7 +11,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { ILayout, ContentTypes, LayoutContent, IShared } from "@/types/blocks/config";
+import { ILayout, ContentTypes, LayoutContent, IShared, IConfigApp } from "@/types/blocks/config";
 import { BlockPalette } from "./BlockPalette";
 import { Canvas } from "./Canvas";
 import { BlockEditor } from "./BlockEditor";
@@ -43,7 +43,7 @@ type Template = {
   id: string;
   title: string;
   isActive: boolean;
-  content: unknown[]; // массив блоков с id
+  content: IConfigApp; // массив блоков с id
 };
 
 const NEW_LAYOUT_ID = "new_layout";
@@ -162,6 +162,32 @@ export const AdminPanel = () => {
     };
     fetchTemplates();
   }, []);
+
+  useEffect(() => {
+    if (!selectedTemplateId || selectedTemplateId === NEW_LAYOUT_ID) {
+      setBlocks([]);
+      sharedForm.reset(DEFAULT_SHARED);
+      footerForm.reset(DEFAULT_FOOTER);
+      return;
+    }
+
+    const template = templates.find((t) => t.id === selectedTemplateId);
+    if (!template) return;
+
+    const { layout = [], shared, footer } = template.content;
+
+    const restoredBlocks: BlockWithId[] = layout.map((item) => ({
+      contentType: item.contentType,
+      content: item.content,
+      props: item.content,
+      id: `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    }));
+    setBlocks(restoredBlocks);
+
+    sharedForm.reset(shared ?? DEFAULT_SHARED);
+
+    footerForm.reset(footer ?? DEFAULT_FOOTER);
+  }, [selectedTemplateId, templates]);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -288,7 +314,23 @@ export const AdminPanel = () => {
 
       toast.success("Сохранено");
 
-      setTemplates((prev) => prev.map((t) => (t.id === selectedTemplateId ? { ...t, content: blocks } : t)));
+      setTemplates((prev) =>
+        prev.map((t) =>
+          t.id === selectedTemplateId
+            ? {
+                ...t,
+                content: {
+                  layout: blocks.map((b) => ({
+                    contentType: b.contentType,
+                    content: b.props ?? b.content,
+                  })),
+                  shared: sharedForm.getValues(),
+                  footer: footerForm.getValues(),
+                },
+              }
+            : t,
+        ),
+      );
     } catch (err) {
       console.error(err);
       toast.error("Ошибка сохранения");
