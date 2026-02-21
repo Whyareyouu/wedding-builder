@@ -61,7 +61,7 @@ export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
       case "CALENDAR":
         return <div className="text-sm text-gray-500">Календарь не требует редактирования</div>;
       case "FRAME":
-        return <FrameContent />;
+        return <FrameContent basePath="" />;
       default:
         return <div className="text-sm text-gray-500">Неизвестный тип блока</div>;
     }

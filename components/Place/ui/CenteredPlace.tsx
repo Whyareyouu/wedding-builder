@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { Typography } from "@/components/ui/Typography";
 import { PhotoFrame } from "@/components/shared/PhotoFrame";
 import { Button } from "@/components/ui/button";
-import { IPlaceSettings } from "@/types/blocks/place";
+import { IFramePlace } from "@/types/blocks/place";
 
 type CenteredPlaceProps = {
-  place: IPlaceSettings;
+  place: IFramePlace;
   numberOfElement: number;
 };
 

@@ -6,7 +6,7 @@ interface IIcon {
   height: number;
 }
 
-interface IPlan {
+export interface IPlan {
   event: string;
   description?: string;
   startTime: string;

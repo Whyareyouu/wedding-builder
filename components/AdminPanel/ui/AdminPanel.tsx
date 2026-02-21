@@ -11,21 +11,25 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { ILayout, ContentTypes } from "@/types/blocks/config";
+import { ILayout, ContentTypes, LayoutContent } from "@/types/blocks/config";
 import { BlockPalette } from "./BlockPalette";
 import { Canvas } from "./Canvas";
 import { BlockEditor } from "./BlockEditor";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { FormStructure } from "@/types/blocks/form";
 
 type PlacedBlock = {
   id: string;
   type: ContentTypes;
-  props: Record<string, any>;
+  props: LayoutContent;
 };
 
-type BlockWithId = ILayout & { id: string; props?: Record<string, any> };
-
+type BlockWithId = Omit<ILayout, "content"> & {
+  id: string;
+  content: LayoutContent;
+  props?: LayoutContent;
+};
 const BLOCK_TYPES: { type: ContentTypes; label: string }[] = [
   { type: "PLACE", label: "Место" },
   { type: "TIMINGS", label: "План дня" },
@@ -36,7 +40,7 @@ const BLOCK_TYPES: { type: ContentTypes; label: string }[] = [
   { type: "FRAME", label: "Фото рамка" },
 ];
 
-const createDefaultContent = (contentType: ContentTypes) => {
+const createDefaultContent = (contentType: ContentTypes): LayoutContent => {
   switch (contentType) {
     case "PLACE":
       return {
@@ -62,29 +66,22 @@ const createDefaultContent = (contentType: ContentTypes) => {
         colorSchema: [],
       };
     case "FORM":
-      return [];
+      return [] as FormStructure[];
     case "CALENDAR":
-      return {} as any; // CALENDAR не имеет content, используется только для рендеринга
+      return {};
     case "FRAME":
       return {
-        images: [
-          {
-            path: "/system/placeholder.jpg",
-            width: 400,
-            height: 300,
-          },
-        ],
+        images: [{ path: "/system/placeholder.jpg", width: 400, height: 300 }],
         frameBorderColor: "#000000",
         frameIntervalMs: 3000,
       };
     default:
-      return {};
+      return [];
   }
 };
 
-const createDefaultProps = (contentType: ContentTypes): Record<string, any> => {
-  const content = createDefaultContent(contentType);
-  return content as Record<string, any>;
+const createDefaultProps = (contentType: ContentTypes): LayoutContent => {
+  return createDefaultContent(contentType);
 };
 
 export const AdminPanel = () => {
@@ -173,29 +170,26 @@ export const AdminPanel = () => {
       setEditingBlock({
         id: block.id,
         type: block.contentType,
-        props: block.props || (block.content as Record<string, any>),
+        props: block.props ?? block.content,
       });
       setDrawerOpen(true);
     }
   };
 
-  const handleBlockSave = (blockId: string, props: Record<string, any> | any[]) => {
+  const handleBlockSave = (blockId: string, props: LayoutContent) => {
     setBlocks((prev) =>
       prev.map((block) => {
         if (block.id === blockId) {
-          // Для FORM блока props это массив, для остальных - объект
-          const updatedContent = block.contentType === "FORM" ? (Array.isArray(props) ? props : []) : props;
-          const updatedBlock = {
+          const updatedBlock: BlockWithId = {
             ...block,
             props,
-            content: updatedContent as any, // Обновляем content для рендеринга
+            content: props,
           };
-          // Обновляем editingBlock если он редактируется
           if (editingBlock?.id === blockId) {
             setEditingBlock({
               id: updatedBlock.id,
               type: updatedBlock.contentType,
-              props: updatedBlock.props || (updatedBlock.content as Record<string, any>),
+              props: updatedBlock.props ?? updatedBlock.content,
             });
           }
           return updatedBlock;
@@ -207,9 +201,8 @@ export const AdminPanel = () => {
 
   const handleSave = () => {
     const layoutData = blocks.map((block) => ({
-      id: block.id,
-      type: block.contentType,
-      props: block.props || block.content,
+      contentType: block.contentType,
+      content: block.props ?? block.content,
     }));
     console.log(JSON.stringify(layoutData, null, 2));
   };

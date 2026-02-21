@@ -6,11 +6,15 @@ import { IDetails } from "@/types/blocks/details";
 import { IFooter } from "@/types/blocks/footer";
 import { IFrame } from "@/types/blocks/frame";
 
+export type ICalendar = object;
+
 export type ContentTypes = "FRIENDS" | "PLACE" | "TIMINGS" | "DETAILS" | "DRESSCODE" | "FORM" | "CALENDAR" | "FRAME";
+
+export type LayoutContent = IDressCode | IEvent | FormStructure[] | IPlace | IDetails | IFrame | ICalendar;
 
 export interface ILayout {
   contentType: ContentTypes;
-  content: IDressCode | IEvent | FormStructure[] | IPlace | IDetails | IFrame;
+  content: LayoutContent;
 }
 
 export interface IImage {

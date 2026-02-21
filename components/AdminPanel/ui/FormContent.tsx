@@ -31,31 +31,31 @@ const DEFAULT_SIMPLE_FIELD: ISimpleField = {
   defaultValue: "",
 };
 
-const isGroupField = (field: FormStructure): field is ICheckboxGroupField | IRadioGroupField =>
-  field.type === "radio_group" || field.type === "checkbox_group";
+const isGroupField = (field: FormStructure | undefined): field is ICheckboxGroupField | IRadioGroupField =>
+  field?.type === "radio_group" || field?.type === "checkbox_group";
 
-const FieldOptions = ({ fieldIndex, control, register }: { fieldIndex: number; control: any; register: any }) => {
-  const {
-    fields: options,
-    append,
-    remove,
-  } = useFieldArray<IFormBlock>({
+const FieldOptions = ({ fieldIndex }: { fieldIndex: number }) => {
+  const { control, register } = useFormContext<IFormBlock>();
+
+  const { fields, append, remove } = useFieldArray({
     control,
-    name: `fields.${fieldIndex}.fields`,
+    name: `fields.${fieldIndex}.fields` as const,
   });
 
   return (
     <div className="mt-2 space-y-2">
       <Label className="text-sm">Варианты ответов:</Label>
-      {options.map((option, optIndex) => (
+
+      {fields.map((option, optIndex) => (
         <div key={option.id} className="flex gap-2">
-          <Input {...register(`fields.${fieldIndex}.fields.${optIndex}.value`)} placeholder="Значение" />
-          <Input {...register(`fields.${fieldIndex}.fields.${optIndex}.label`)} placeholder="Метка" />
+          <Input {...register(`fields.${fieldIndex}.fields.${optIndex}.label` as const)} placeholder="Заголовок поля" />
+          <Input {...register(`fields.${fieldIndex}.fields.${optIndex}.value` as const)} placeholder="Значение поля" />
           <Button type="button" variant="ghost" size="icon" onClick={() => remove(optIndex)}>
             <Trash2 className="h-4 w-4 text-destructive" />
           </Button>
         </div>
       ))}
+
       <Button type="button" variant="outline" size="sm" onClick={() => append(DEFAULT_OPTION)}>
         Добавить вариант
       </Button>
@@ -66,61 +66,69 @@ const FieldOptions = ({ fieldIndex, control, register }: { fieldIndex: number; c
 export const FormContent = () => {
   const { register, control, setValue, reset } = useFormContext<IFormBlock>();
 
-  const {
-    fields: formFields,
-    append,
-    remove,
-  } = useFieldArray<IFormBlock>({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "fields",
   });
 
-  const watchedFields = useWatch<IFormBlock>({ control, name: "fields" }) ?? [];
+  const watchedFields = useWatch({
+    control,
+    name: "fields",
+  }) as FormStructure[];
 
   return (
     <Field>
-      <FieldLabel>Поля формы ({formFields.length})</FieldLabel>
+      <FieldLabel>Поля формы ({fields.length})</FieldLabel>
+
       <FieldContent>
         <div className="space-y-4">
-          {formFields.map((field, index) => {
-            const currentType = watchedFields[index]?.type;
+          {fields.map((field, index) => {
+            const currentField = watchedFields?.[index];
 
             return (
               <Card key={field.id} className="p-4">
-                <CardTitle className="self-end">
+                <CardTitle className="flex justify-end">
                   <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
                 </CardTitle>
 
                 <div className="space-y-3">
-                  <Input {...register(`fields.${index}.label`)} placeholder="Метка поля" />
-                  <Input {...register(`fields.${index}.name`)} placeholder="Имя поля" />
+                  <Input {...register(`fields.${index}.label` as const)} placeholder="Заголовок поля" />
+
+                  <Input {...register(`fields.${index}.name` as const)} placeholder="Имя поля" />
 
                   <Select
-                    defaultValue={field.type}
+                    value={currentField?.type}
                     onValueChange={(value: FormStructure["type"]) => {
-                      const updatedFields = [...watchedFields];
+                      const updated = [...watchedFields];
+
                       if (value === "radio_group" || value === "checkbox_group") {
-                        updatedFields[index] = {
-                          ...updatedFields[index],
+                        updated[index] = {
                           type: value,
+                          label: currentField?.label ?? "",
+                          name: currentField?.name ?? "",
+                          required: currentField?.required ?? false,
                           fields: [],
                         } as ICheckboxGroupField | IRadioGroupField;
                       } else {
-                        updatedFields[index] = {
-                          ...updatedFields[index],
+                        updated[index] = {
                           type: value,
+                          label: currentField?.label ?? "",
+                          name: currentField?.name ?? "",
+                          required: currentField?.required ?? false,
                           placeholder: "",
                           defaultValue: "",
                         } as ISimpleField;
                       }
-                      reset(updatedFields);
+
+                      reset({ fields: updated });
                     }}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
+
                     <SelectContent>
                       <SelectGroup>
                         {FIELD_TYPES.map((item) => (
@@ -134,18 +142,22 @@ export const FormContent = () => {
 
                   <div className="flex items-center gap-2">
                     <Checkbox
-                      onCheckedChange={(checked) => setValue(`fields.${index}.required`, !!checked)}
-                      defaultChecked={field.required}
+                      checked={currentField?.required}
+                      onCheckedChange={(checked) => setValue(`fields.${index}.required` as const, !!checked)}
                     />
                     <Label>Обязательное поле</Label>
                   </div>
 
-                  {isGroupField(watchedFields[index]) ? (
-                    <FieldOptions fieldIndex={index} control={control} register={register} />
+                  {isGroupField(currentField) ? (
+                    <FieldOptions fieldIndex={index} />
                   ) : (
                     <>
-                      <Input {...register(`fields.${index}.placeholder`)} placeholder="Placeholder" />
-                      <Input {...register(`fields.${index}.defaultValue`)} placeholder="Значение по умолчанию" />
+                      <Input {...register(`fields.${index}.placeholder` as const)} placeholder="Placeholder" />
+
+                      <Input
+                        {...register(`fields.${index}.defaultValue` as const)}
+                        placeholder="Значение по умолчанию"
+                      />
                     </>
                   )}
                 </div>
