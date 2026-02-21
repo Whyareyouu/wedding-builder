@@ -39,7 +39,7 @@ export const Details = ({ content }: DetailsProps) => {
             viewport={{ once: true }}
           >
             {detail?.title && (
-              <Typography fontSize="xxl" font="GreatVibes">
+              <Typography fontSize="subtitle" font="GreatVibes">
                 {detail.title}
               </Typography>
             )}
