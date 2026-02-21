@@ -8,7 +8,7 @@ interface Template {
   [key: string]: unknown;
 }
 
-export async function POST(req: Request): Promise<Response> {
+export async function POST(req: Request) {
   try {
     const rawData = await fsPromises.readFile(DATA_FILE_PATH);
     let objectData: Template[] = JSON.parse(rawData.toString());
@@ -41,7 +41,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 }
 
-export async function GET(request: Request): Promise<Response> {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const wantActiveOnly = searchParams.get("active") === "true";
