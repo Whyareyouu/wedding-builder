@@ -23,27 +23,23 @@ interface PlacedBlock {
 interface BlockEditorProps {
   block: PlacedBlock;
   onSave: (id: string, props: Record<string, any> | any[]) => void;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
-  const defaultValues = block.type === "FORM" && Array.isArray(block.props) ? block.props : block.props;
+  const defaultValues = block.type === "FORM" ? { fields: Array.isArray(block.props) ? block.props : [] } : block.props;
 
-  const methods = useForm({
-    defaultValues,
-  });
+  const methods = useForm({ defaultValues });
 
-  const { register, handleSubmit, watch, setValue, control, getValues } = methods;
+  const { handleSubmit } = methods;
 
-  const onSubmit = (data: Record<string, any> | any[]) => {
-    // Для FORM блока нужно получить весь массив через getValues()
+  const onSubmit = (data: Record<string, any>) => {
     if (block.type === "FORM") {
-      const allValues = getValues();
-      const formArray = Array.isArray(allValues) ? allValues : Object.values(allValues);
-      onSave(block.id, formArray);
+      onSave(block.id, (data as { fields: [] }).fields);
     } else {
-      onSave(block.id, data as Record<string, any>);
+      onSave(block.id, data);
     }
+    onClose();
   };
 
   const renderFormFields = () => {

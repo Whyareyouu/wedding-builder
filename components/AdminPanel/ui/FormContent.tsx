@@ -20,8 +20,6 @@ const FIELD_TYPES: { label: string; value: FormStructure["type"] }[] = [
   { label: "Группа чекбоксов", value: "checkbox_group" },
 ];
 
-const DEFAULT_OPTION = { value: "", label: "" };
-
 const DEFAULT_SIMPLE_FIELD: ISimpleField = {
   type: "input",
   label: "",
@@ -30,6 +28,8 @@ const DEFAULT_SIMPLE_FIELD: ISimpleField = {
   placeholder: "",
   defaultValue: "",
 };
+
+const DEFAULT_OPTION = { value: "", label: "" };
 
 const isGroupField = (field: FormStructure | undefined): field is ICheckboxGroupField | IRadioGroupField =>
   field?.type === "radio_group" || field?.type === "checkbox_group";
@@ -48,8 +48,14 @@ const FieldOptions = ({ fieldIndex }: { fieldIndex: number }) => {
 
       {fields.map((option, optIndex) => (
         <div key={option.id} className="flex gap-2">
-          <Input {...register(`fields.${fieldIndex}.fields.${optIndex}.label` as const)} placeholder="Заголовок поля" />
-          <Input {...register(`fields.${fieldIndex}.fields.${optIndex}.value` as const)} placeholder="Значение поля" />
+          <Input
+            {...register(`fields.${fieldIndex}.fields.${optIndex}.label` as const)}
+            placeholder="Заголовок варианта"
+          />
+          <Input
+            {...register(`fields.${fieldIndex}.fields.${optIndex}.value` as const)}
+            placeholder="Значение варианта"
+          />
           <Button type="button" variant="ghost" size="icon" onClick={() => remove(optIndex)}>
             <Trash2 className="h-4 w-4 text-destructive" />
           </Button>
@@ -79,7 +85,6 @@ export const FormContent = () => {
   return (
     <Field>
       <FieldLabel>Поля формы ({fields.length})</FieldLabel>
-
       <FieldContent>
         <div className="space-y-4">
           {fields.map((field, index) => {
@@ -94,10 +99,11 @@ export const FormContent = () => {
                 </CardTitle>
 
                 <div className="space-y-3">
+                  {/* Заголовок и имя */}
                   <Input {...register(`fields.${index}.label` as const)} placeholder="Заголовок поля" />
-
                   <Input {...register(`fields.${index}.name` as const)} placeholder="Имя поля" />
 
+                  {/* Тип поля */}
                   <Select
                     value={currentField?.type}
                     onValueChange={(value: FormStructure["type"]) => {
@@ -128,7 +134,6 @@ export const FormContent = () => {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-
                     <SelectContent>
                       <SelectGroup>
                         {FIELD_TYPES.map((item) => (
@@ -140,6 +145,7 @@ export const FormContent = () => {
                     </SelectContent>
                   </Select>
 
+                  {/* Обязательное поле */}
                   <div className="flex items-center gap-2">
                     <Checkbox
                       checked={currentField?.required}
@@ -148,12 +154,12 @@ export const FormContent = () => {
                     <Label>Обязательное поле</Label>
                   </div>
 
+                  {/* Опции для групповых полей */}
                   {isGroupField(currentField) ? (
                     <FieldOptions fieldIndex={index} />
                   ) : (
                     <>
                       <Input {...register(`fields.${index}.placeholder` as const)} placeholder="Placeholder" />
-
                       <Input
                         {...register(`fields.${index}.defaultValue` as const)}
                         placeholder="Значение по умолчанию"
@@ -165,6 +171,7 @@ export const FormContent = () => {
             );
           })}
 
+          {/* Кнопка добавления нового поля */}
           <Button type="button" variant="outline" onClick={() => append(DEFAULT_SIMPLE_FIELD)}>
             Добавить поле
           </Button>

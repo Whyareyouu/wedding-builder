@@ -22,11 +22,9 @@ type SaveModalProps = {
 };
 
 export const SaveModal = ({ isOpen, onClose, handleSaveForm, defaultValues }: SaveModalProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { dirtyFields },
-  } = useForm<FormData>({ defaultValues: { ...defaultValues, id: defaultValues?.id ?? v4() } });
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: { ...defaultValues, id: defaultValues?.id ?? v4() },
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -72,11 +70,7 @@ export const SaveModal = ({ isOpen, onClose, handleSaveForm, defaultValues }: Sa
             <Button variant="outline" onClick={onClose} type="button">
               Отмена
             </Button>
-            <Button
-              type="submit"
-              disabled={Object.keys(dirtyFields).length === 0}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
               Сохранить
             </Button>
           </DialogFooter>
