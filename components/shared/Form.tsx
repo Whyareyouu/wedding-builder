@@ -80,7 +80,7 @@ const CustomFieldLabel = ({
           </TooltipContent>
         </Tooltip>
       )}
-      <Typography fontSize="xxl" font="Cormorant" className={`${error ? "text-black" : ""}`}>
+      <Typography fontSize="xxl" font="Cormorant" className={error ? "text-black" : ""}>
         {label}
       </Typography>
     </FieldLabel>
@@ -260,6 +260,7 @@ export const Form = ({ formData }: FormProps) => {
             name={typedMetaField.name}
             control={control}
             defaultValue={typedMetaField?.defaultValue}
+            rules={{ required: typedMetaField?.required }}
             render={({ field, fieldState }) => (
               <Field orientation="responsive" data-invalid={fieldState.invalid}>
                 <FieldContent>
