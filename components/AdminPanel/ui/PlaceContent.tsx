@@ -120,6 +120,19 @@ export const PlaceContent = () => {
 
                   {type === "MAP" && (
                     <>
+                      <Input
+                        type="number"
+                        step="0.000001"
+                        {...register(`places.${index}.mapSettings.coordinates.0`, { valueAsNumber: true })}
+                        placeholder="Координата X"
+                      />
+                      <Input
+                        type="number"
+                        step="0.000001"
+                        {...register(`places.${index}.mapSettings.coordinates.1`, { valueAsNumber: true })}
+                        placeholder="Координата Y"
+                      />
+
                       <Textarea {...register(`places.${index}.mapSettings.hint`)} placeholder="Подсказка" />
 
                       <Input {...register(`places.${index}.mapSettings.markerIcon`)} placeholder="Иконка маркера" />
