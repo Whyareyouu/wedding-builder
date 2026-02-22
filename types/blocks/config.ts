@@ -15,6 +15,20 @@ export type LayoutContent = IDressCode | IEvent | FormStructure[] | IPlace | IDe
 export interface ILayout {
   contentType: ContentTypes;
   content: LayoutContent;
+  decorations?: ISectionDecorations[];
+}
+
+export interface ISectionDecorations {
+  path: string;
+  width: number;
+  height: number;
+  position: {
+    top?: string;
+    bottom?: string;
+    left?: string;
+    right?: string;
+  };
+  className?: string;
 }
 
 export interface IImage {

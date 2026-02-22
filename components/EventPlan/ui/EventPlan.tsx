@@ -8,12 +8,14 @@ import { useMemo } from "react";
 import { RoadLayout } from "@/components/EventPlan/ui/RoadLayout";
 import { CardLayout } from "@/components/EventPlan/ui/CardLayout";
 import { TimelineLayout } from "@/components/EventPlan/ui/TimeLineLayout";
+import { ILayout } from "@/types/blocks/config";
 
 type EventPlanProps = {
   content: IEvent;
+  decorations?: ILayout["decorations"];
 };
 
-export const EventPlan = ({ content }: EventPlanProps) => {
+export const EventPlan = ({ content, decorations }: EventPlanProps) => {
   const vlanVariant = useMemo(() => {
     switch (content?.type) {
       case "CARD":
@@ -26,7 +28,7 @@ export const EventPlan = ({ content }: EventPlanProps) => {
   }, [content]);
 
   return (
-    <SectionWrapper>
+    <SectionWrapper decorations={decorations}>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

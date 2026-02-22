@@ -20,9 +20,11 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { InfoIcon } from "lucide-react";
+import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 
 type FormProps = {
   formData: FormStructure[];
+  decorations?: ILayout["decorations"];
 };
 
 const transformData = (formMetadata: FormStructure[], data: Record<string, unknown>) => {
@@ -87,7 +89,7 @@ const CustomFieldLabel = ({
   );
 };
 
-export const Form = ({ formData }: FormProps) => {
+export const Form = ({ formData, decorations }: FormProps) => {
   const { handleSubmit, control } = useForm();
 
   const onSubmit = async (data: Record<string, unknown>) => {
@@ -260,6 +262,7 @@ export const Form = ({ formData }: FormProps) => {
             name={typedMetaField.name}
             control={control}
             defaultValue={typedMetaField?.defaultValue}
+            key={typedMetaField.name}
             rules={{ required: typedMetaField?.required }}
             render={({ field, fieldState }) => (
               <Field orientation="responsive" data-invalid={fieldState.invalid}>
@@ -296,7 +299,7 @@ export const Form = ({ formData }: FormProps) => {
   };
 
   return (
-    <SectionWrapper>
+    <SectionWrapper decorations={decorations}>
       <Typography font="GreatVibes" fontSize="title">
         Анкета
       </Typography>

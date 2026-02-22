@@ -8,14 +8,16 @@ import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { IFramePlace, IMapPlace, IPlace } from "@/types/blocks/place";
 import { CenteredPlace } from "@/components/Place/ui/CenteredPlace";
 import { MapPlace } from "@/components/Place/ui/MapPlace";
+import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 
 type PlaceProps = {
   content: IPlace;
+  decorations?: ILayout["decorations"];
 };
 
-export const Place = ({ content }: PlaceProps) => {
+export const Place = ({ content, decorations }: PlaceProps) => {
   return (
-    <SectionWrapper className="items-stretch">
+    <SectionWrapper className="items-stretch" decorations={decorations}>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

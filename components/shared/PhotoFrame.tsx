@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { IImage } from "@/types/blocks/config";
 import { IFrame } from "@/types/blocks/frame";
 
 type PhotoFrameProps = {

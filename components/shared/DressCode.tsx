@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { IDressCode } from "@/types/blocks/dresscode";
+import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 
 type ColorSchemaItem = {
   color: string;
@@ -15,9 +16,10 @@ type ColorSchemaItem = {
 
 type DressCodeProps = {
   dresscode: IDressCode;
+  decorations?: ILayout["decorations"];
 };
 
-export const DressCode = ({ dresscode }: DressCodeProps) => {
+export const DressCode = ({ dresscode, decorations }: DressCodeProps) => {
   const [selectedColor, setSelectedColor] = useState<ColorSchemaItem | null>(null);
 
   const imageVariants = {
@@ -26,7 +28,7 @@ export const DressCode = ({ dresscode }: DressCodeProps) => {
   };
 
   return (
-    <SectionWrapper>
+    <SectionWrapper decorations={decorations}>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

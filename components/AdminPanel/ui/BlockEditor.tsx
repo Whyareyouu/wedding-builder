@@ -13,6 +13,7 @@ import { DresscodeContent } from "./DresscodeContent";
 import { FrameContent } from "./FrameContent";
 import { FormContent } from "./FormContent";
 import { EventContent } from "./EventContent";
+import { DecorationContent } from "@/components/AdminPanel/ui/DecorationContent";
 
 interface PlacedBlock {
   id: string;
@@ -25,6 +26,8 @@ interface BlockEditorProps {
   onSave: (id: string, props: Record<string, any> | any[]) => void;
   onClose: () => void;
 }
+
+const WITHOUT_DECORATIONS = ["CALENDAR", "FRAME"];
 
 export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
   const defaultValues = block.type === "FORM" ? { fields: Array.isArray(block.props) ? block.props : [] } : block.props;
@@ -81,6 +84,7 @@ export const BlockEditor = ({ block, onSave, onClose }: BlockEditorProps) => {
 
             {renderFormFields()}
           </FieldGroup>
+          {!WITHOUT_DECORATIONS.includes(block.type) && <DecorationContent />}
 
           <div className="flex gap-2 pt-4 border-t">
             <Button type="submit" className="flex-1">

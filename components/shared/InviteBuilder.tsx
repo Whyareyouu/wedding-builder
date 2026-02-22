@@ -1,4 +1,4 @@
-import { IConfigApp, ILayout, IShared } from "@/types/blocks/config";
+import { IConfigApp, ILayout, ISectionDecorations, IShared } from "@/types/blocks/config";
 import { Wrapper } from "@/components/ui/Wrapper";
 import { IPlace } from "@/types/blocks/place";
 import { Place } from "@/components/Place";
@@ -26,46 +26,46 @@ const renderCalendar = (shared: IShared) => {
   return <Calendar targetDate={shared.date} />;
 };
 
-const renderPlace = (content: IPlace) => {
-  return <Place content={content} />;
+const renderPlace = (content: IPlace, decorations?: ILayout["decorations"]) => {
+  return <Place content={content} decorations={decorations} />;
 };
 
-const renderTimings = (content: IEvent) => {
-  return <EventPlan content={content} />;
+const renderTimings = (content: IEvent, decorations?: ILayout["decorations"]) => {
+  return <EventPlan content={content} decorations={decorations} />;
 };
 
-const renderDetails = (content: IDetails) => {
-  return <Details content={content as IDetails} />;
+const renderDetails = (content: IDetails, decorations?: ILayout["decorations"]) => {
+  return <Details content={content as IDetails} decorations={decorations} />;
 };
 
-const renderDresscode = (content: IDressCode) => {
-  return <DressCode dresscode={content} />;
+const renderDresscode = (content: IDressCode, decorations?: ILayout["decorations"]) => {
+  return <DressCode dresscode={content} decorations={decorations} />;
 };
 
-const renderForm = (content: FormStructure[]) => {
-  return <Form formData={content} />;
+const renderForm = (content: FormStructure[], decorations?: ILayout["decorations"]) => {
+  return <Form formData={content} decorations={decorations} />;
 };
 
 const renderFrame = (content: IFrame) => {
   return <PhotoFrame content={content} />;
 };
 
-const renderContent = (layout: ILayout, shared: IShared) => {
+const renderContent = (layout: ILayout, shared: IShared, decorations?: ILayout["decorations"]) => {
   const { content, contentType } = layout;
 
   switch (contentType) {
     case "DETAILS":
-      return renderDetails(content as IDetails);
+      return renderDetails(content as IDetails, decorations);
     case "DRESSCODE":
-      return renderDresscode(content as IDressCode);
+      return renderDresscode(content as IDressCode, decorations);
     case "FORM":
-      return renderForm(content as FormStructure[]);
+      return renderForm(content as FormStructure[], decorations);
     case "CALENDAR":
       return renderCalendar(shared);
     case "PLACE":
-      return renderPlace(content as IPlace);
+      return renderPlace(content as IPlace, decorations);
     case "TIMINGS":
-      return renderTimings(content as IEvent);
+      return renderTimings(content as IEvent, decorations);
     case "FRAME":
       return renderFrame(content as IFrame);
     default:
@@ -79,7 +79,7 @@ export const InviteBuilder = ({ config }: InviteBuilderProps) => {
       <Header wifeName={config.shared.wifeName} husbandName={config.shared.husbandName} date={config.shared.textDate} />
       <main>
         {config.layout.map((layout, index) => (
-          <Fragment key={index}>{renderContent(layout, config.shared)}</Fragment>
+          <Fragment key={index}>{renderContent(layout, config.shared, layout?.decorations)}</Fragment>
         ))}
       </main>
       <Footer date={config.shared.date} footerSettings={config?.footer} />
