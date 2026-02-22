@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ILayout } from "@/types/blocks/config";
+import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 
 type Props = {
   className?: HTMLElement["className"];
@@ -13,11 +13,6 @@ type Props = {
 export const SectionWrapper = ({ children, className, decorations }: React.PropsWithChildren<Props>) => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [rect, setRect] = useState<DOMRect | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useLayoutEffect(() => {
     if (!sectionRef.current) return;
@@ -38,7 +33,7 @@ export const SectionWrapper = ({ children, className, decorations }: React.Props
     };
   }, []);
 
-  const resolveVerticalPosition = (position: any, rect: DOMRect, elementHeight: number) => {
+  const resolveVerticalPosition = (position: ISectionDecorations["position"], rect: DOMRect, elementHeight: number) => {
     const sectionTop = rect.top + window.scrollY;
     const sectionBottom = sectionTop + rect.height;
 
@@ -59,7 +54,7 @@ export const SectionWrapper = ({ children, className, decorations }: React.Props
   };
 
   const portalLayer =
-    mounted && rect && (decorations || []).length > 0
+    rect && (decorations || []).length > 0
       ? createPortal(
           <>
             {decorations!.map((decoration, index) => {
