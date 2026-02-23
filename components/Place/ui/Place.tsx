@@ -8,7 +8,7 @@ import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { IFramePlace, IMapPlace, IPlace } from "@/types/blocks/place";
 import { CenteredPlace } from "@/components/Place/ui/CenteredPlace";
 import { MapPlace } from "@/components/Place/ui/MapPlace";
-import { ILayout, ISectionDecorations } from "@/types/blocks/config";
+import { ILayout } from "@/types/blocks/config";
 
 type PlaceProps = {
   content: IPlace;
@@ -16,6 +16,7 @@ type PlaceProps = {
 };
 
 export const Place = ({ content, decorations }: PlaceProps) => {
+  console.log(decorations);
   return (
     <SectionWrapper className="items-stretch" decorations={decorations}>
       <motion.div

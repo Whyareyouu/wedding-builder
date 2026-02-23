@@ -5,9 +5,12 @@ import { motion } from "framer-motion";
 
 import Image from "next/image";
 import { Typography } from "@/components/ui/Typography";
+import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { ILayout } from "@/types/blocks/config";
 
 type CalendarProps = {
   targetDate: string;
+  decorations?: ILayout["decorations"];
 };
 
 const WEEK_DAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
@@ -43,7 +46,7 @@ const getMonthData = (date: Date): { year: number; month: number; days: (number 
   return { year, month, days };
 };
 
-export const Calendar = ({ targetDate }: CalendarProps) => {
+export const Calendar = ({ targetDate, decorations }: CalendarProps) => {
   const date = useMemo(() => parseDate(targetDate), [targetDate]);
   const selectedDay = date.getDate();
 
@@ -52,59 +55,61 @@ export const Calendar = ({ targetDate }: CalendarProps) => {
   const monthName = date.toLocaleString("ru-RU", { month: "long" });
 
   return (
-    <section className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl ">
-      <div className="text-center mb-4 flex justify-between items-center">
-        <Typography className="capitalize italic text-justify" fontSize="xxl" font="Cormorant">
-          {monthName}
-        </Typography>
-        <Image src="/icons/heart.svg" alt="<3" width={48} height={24} />
-        <Typography className="capitalize italic text-justify" fontSize="xxl" font="Cormorant">
-          {year}
-        </Typography>
-      </div>
+    <SectionWrapper decorations={decorations}>
+      <div className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl ">
+        <div className="text-center mb-4 flex justify-between items-center">
+          <Typography className="capitalize italic text-justify" fontSize="xxl" font="Cormorant">
+            {monthName}
+          </Typography>
+          <Image src="/icons/heart.svg" alt="<3" width={48} height={24} />
+          <Typography className="capitalize italic text-justify" fontSize="xxl" font="Cormorant">
+            {year}
+          </Typography>
+        </div>
 
-      <div className="grid grid-cols-7 mb-3 text-sm font-medium text-gray-500">
-        {WEEK_DAYS.map((day) => (
-          <div key={day} className="text-center">
-            {day.toUpperCase()}
-          </div>
-        ))}
-      </div>
+        <div className="grid grid-cols-7 mb-3 text-sm font-medium text-gray-500">
+          {WEEK_DAYS.map((day) => (
+            <div key={day} className="text-center">
+              {day.toUpperCase()}
+            </div>
+          ))}
+        </div>
 
-      <div className="grid grid-cols-7 gap-2">
-        {days.map((day, index) => (
-          <div key={index} className="h-12 flex items-center justify-center relative">
-            {day && day === selectedDay ? (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 260, damping: 15 }}
-                className="relative w-12 h-12 flex items-center justify-center"
-              >
+        <div className="grid grid-cols-7 gap-2">
+          {days.map((day, index) => (
+            <div key={index} className="h-12 flex items-center justify-center relative">
+              {day && day === selectedDay ? (
                 <motion.div
-                  initial={{ rotate: 0, scale: 1 }}
-                  animate={{
-                    rotate: [0, -20, 0],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute top-[-2px]"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 15 }}
+                  className="relative w-12 h-12 flex items-center justify-center"
                 >
-                  <Image src="/icons/diamond-ring.svg" alt="♡" width={64} height={64} />
+                  <motion.div
+                    initial={{ rotate: 0, scale: 1 }}
+                    animate={{
+                      rotate: [0, -20, 0],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute top-[-2px]"
+                  >
+                    <Image src="/icons/diamond-ring.svg" alt="♡" width={64} height={64} />
+                  </motion.div>
+                  <div className="absolute text-gray-950">{day}</div>
                 </motion.div>
-                <div className="absolute text-gray-950">{day}</div>
-              </motion.div>
-            ) : (
-              <div className="w-12 h-12 flex items-center justify-center rounded-xl  transition text-gray-700">
-                {day ?? ""}
-              </div>
-            )}
-          </div>
-        ))}
+              ) : (
+                <div className="w-12 h-12 flex items-center justify-center rounded-xl  transition text-gray-700">
+                  {day ?? ""}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 };

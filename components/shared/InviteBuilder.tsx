@@ -1,4 +1,4 @@
-import { IConfigApp, ILayout, ISectionDecorations, IShared } from "@/types/blocks/config";
+import { IConfigApp, ILayout, IShared } from "@/types/blocks/config";
 import { Wrapper } from "@/components/ui/Wrapper";
 import { IPlace } from "@/types/blocks/place";
 import { Place } from "@/components/Place";
@@ -10,20 +10,19 @@ import { IDressCode } from "@/types/blocks/dresscode";
 import { DressCode } from "@/components/shared/DressCode";
 import { FormStructure } from "@/types/blocks/form";
 import { Form } from "./Form";
-
-import { Header } from "@/components/shared/Header";
 import { Footer } from "@/components/shared/Footer";
 import { Fragment } from "react";
 import { Calendar } from "@/components/shared/Calendar";
 import { IFrame } from "@/types/blocks/frame";
 import { PhotoFrame } from "@/components/shared/PhotoFrame";
+import { Header } from "@/components/Header";
 
 type InviteBuilderProps = {
   config: IConfigApp;
 };
 
-const renderCalendar = (shared: IShared) => {
-  return <Calendar targetDate={shared.date} />;
+const renderCalendar = (shared: IShared, decorations?: ILayout["decorations"]) => {
+  return <Calendar targetDate={shared.date} decorations={decorations} />;
 };
 
 const renderPlace = (content: IPlace, decorations?: ILayout["decorations"]) => {
@@ -61,7 +60,7 @@ const renderContent = (layout: ILayout, shared: IShared, decorations?: ILayout["
     case "FORM":
       return renderForm(content as FormStructure[], decorations);
     case "CALENDAR":
-      return renderCalendar(shared);
+      return renderCalendar(shared, decorations);
     case "PLACE":
       return renderPlace(content as IPlace, decorations);
     case "TIMINGS":
@@ -76,7 +75,15 @@ const renderContent = (layout: ILayout, shared: IShared, decorations?: ILayout["
 export const InviteBuilder = ({ config }: InviteBuilderProps) => {
   return (
     <Wrapper backgroundImage={config.shared?.backgroundImage}>
-      <Header wifeName={config.shared.wifeName} husbandName={config.shared.husbandName} date={config.shared.textDate} />
+      {config?.header && (
+        <Header
+          wifeName={config.shared.wifeName}
+          husbandName={config.shared.husbandName}
+          date={config.shared.textDate}
+          pattern={config?.header?.pattern}
+          decorations={config?.header?.decorations}
+        />
+      )}
       <main>
         {config.layout.map((layout, index) => (
           <Fragment key={index}>{renderContent(layout, config.shared, layout?.decorations)}</Fragment>
