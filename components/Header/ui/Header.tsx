@@ -4,6 +4,7 @@ import { FullnamesPattern } from "./FullnamesPattern";
 import { MinimalPattern } from "./MinimalPattern";
 import { StackedPattern } from "./StackedPattern";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { IShared } from "@/types/blocks/config";
 
 const PATTERN_MAP = {
   initials: InitialsPattern,
@@ -12,7 +13,11 @@ const PATTERN_MAP = {
   stacked: StackedPattern,
 } as const;
 
-export const Header = ({ pattern = "initials", decorations, ...props }: IHeader) => {
+export const Header = ({
+  pattern = "initials",
+  decorations,
+  ...props
+}: IHeader & Pick<IShared, "date" | "husbandName" | "wifeName">) => {
   const PatternComponent = PATTERN_MAP[pattern];
 
   return (

@@ -1,9 +1,9 @@
 "use client";
 import { Typography } from "@/components/ui/Typography";
 import { motion } from "framer-motion";
-import { IHeader } from "@/types/blocks/header";
+import { IShared } from "@/types/blocks/config";
 
-export const StackedPattern = ({ wifeName, husbandName, date }: IHeader) => {
+export const StackedPattern = ({ wifeName, husbandName, date }: Pick<IShared, "date" | "husbandName" | "wifeName">) => {
   return (
     <div className="flex flex-col items-center gap-2">
       {[husbandName, wifeName].map((name, i) => (

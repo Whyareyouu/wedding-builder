@@ -3,10 +3,13 @@ import Image from "next/image";
 import { Typography } from "@/components/ui/Typography";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
+import { IShared } from "@/types/blocks/config";
 
-import { IHeader } from "@/types/blocks/header";
-
-export const InitialsPattern = ({ wifeName, husbandName, date }: IHeader) => {
+export const InitialsPattern = ({
+  wifeName,
+  husbandName,
+  date,
+}: Pick<IShared, "date" | "husbandName" | "wifeName">) => {
   const { husbandInitial, wifeInitial } = useMemo(
     () => ({
       husbandInitial: husbandName.at(0)?.toUpperCase(),

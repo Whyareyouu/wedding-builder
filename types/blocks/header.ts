@@ -1,8 +1,8 @@
-import { ISectionDecorations, IShared } from "@/types/blocks/config";
+import { ISectionDecorations } from "@/types/blocks/config";
 
 export type HeaderPattern = "initials" | "fullnames" | "minimal" | "stacked";
 
-export interface IHeader extends Pick<IShared, "date" | "husbandName" | "wifeName"> {
+export interface IHeader {
   pattern?: HeaderPattern;
   decorations?: ISectionDecorations[];
 }

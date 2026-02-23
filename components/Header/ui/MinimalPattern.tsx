@@ -1,10 +1,9 @@
 "use client";
 import { Typography } from "@/components/ui/Typography";
 import { motion } from "framer-motion";
+import { IShared } from "@/types/blocks/config";
 
-import { IHeader } from "@/types/blocks/header";
-
-export const MinimalPattern = ({ wifeName, husbandName, date }: IHeader) => {
+export const MinimalPattern = ({ wifeName, husbandName, date }: Pick<IShared, "date" | "husbandName" | "wifeName">) => {
   return (
     <div className="flex flex-col items-center gap-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>

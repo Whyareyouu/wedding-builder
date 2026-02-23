@@ -50,5 +50,5 @@ export interface IConfigApp {
   layout: ILayout[];
   shared: IShared;
   footer: IFooter;
-  header: IHeader;
+  header?: IHeader;
 }
