@@ -1,0 +1,483 @@
+[
+  {
+    "id": "195cb5f8-ce4b-4bd3-886f-b8ca6c67b984",
+    "title": "Вариант с картой",
+    "content": {
+      "header": {
+        "pattern": "stacked"
+      },
+      "layout": [
+        {
+          "contentType": "DETAILS",
+          "decorations": [
+            {
+              "path": "/decorations/piones.png",
+              "width": 250,
+              "height": 300,
+              "position": {
+                "top": "0px",
+                "left": "20%"
+              },
+              "className": "opacity-40"
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 220,
+              "height": 280,
+              "position": {
+                "bottom": "0px",
+                "left": "10%"
+              }
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 240,
+              "height": 320,
+              "position": {
+                "top": "2%",
+                "right": "15%"
+              }
+            }
+          ],
+          "content": {
+            "title": "Дорогие родные и друзья!",
+            "align": "center",
+            "details": [
+              {
+                "detail": "Приглашаем вас разделить\nс нами радость особенного для нас события и стать частью нашей\nсемейной истории!",
+                "title": ""
+              }
+            ]
+          }
+        },
+        {
+          "contentType": "CALENDAR",
+          "decorations": [
+            {
+              "path": "/decorations/piones.png",
+              "width": 250,
+              "height": 200,
+              "position": {
+                "top": "0px",
+                "left": "20%"
+              },
+              "className": "opacity-40"
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 220,
+              "height": 200,
+              "position": {
+                "bottom": "0px",
+                "left": "10%"
+              }
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 240,
+              "height": 200,
+              "position": {
+                "top": "2%",
+                "right": "25%"
+              }
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 240,
+              "height": 200,
+              "position": {
+                "bottom": "0",
+                "right": "5%"
+              }
+            }
+          ],
+          "content": {}
+        },
+        {
+          "contentType": "PLACE",
+          "decorations": [
+            {
+              "path": "/decorations/flower_col.png",
+              "width": 400,
+              "height": 600,
+              "position": {
+                "top": "10%",
+                "left": "40px"
+              },
+              "className": "opacity-70"
+            },
+            {
+              "path": "/decorations/white_roses.png",
+              "width": 400,
+              "height": 200,
+              "position": {
+                "bottom": "10%",
+                "left": "40px"
+              },
+              "className": "opacity-70"
+            },
+            {
+              "path": "/decorations/flower_col.png",
+              "width": 400,
+              "height": 600,
+              "position": {
+                "bottom": "10%",
+                "right": "40px"
+              }
+            },
+            {
+              "path": "/decorations/white_roses.png",
+              "width": 400,
+              "height": 200,
+              "position": {
+                "top": "10%",
+                "right": "40px"
+              }
+            }
+          ],
+          "content": {
+            "title": "Локация",
+            "type": "MAP",
+            "places": [
+              {
+                "title": "Торжественная церемония",
+                "address": "Октябрьская ул., 4, Старая Купавна",
+                "startTime": "14:00",
+                "dividerIcon": "icons/heart.svg",
+                "mapSettings": {
+                  "coordinates": [
+                    55.806953,
+                    38.17235
+                  ],
+                  "hint": "Отдел № 1 Управления ЗАГС по Богородскому городскому округу и городскому округу Черноголовка, Октябрьская ул., 4, Старая Купавна",
+                  "markerIcon": "/images/Shelby.png",
+                  "yandexMapUrl": "https://yandex.ru/maps/-/CPU4V2yY"
+                }
+              },
+              {
+                "title": "Праздничный банкет",
+                "address": "ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
+                "startTime": "16:00",
+                "mapSettings": {
+                  "coordinates": [
+                    55.772403,
+                    37.923159
+                  ],
+                  "hint": "Загородный клуб Дольче \n ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
+                  "markerIcon": "/images/Shelby.png",
+                  "yandexMapUrl": "https://yandex.ru/maps/-/CPU4ZQKi"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "contentType": "TIMINGS",
+          "decorations": [
+            {
+              "path": "/decorations/heart.png",
+              "width": 400,
+              "height": 400,
+              "position": {
+                "top": "0px",
+                "left": "20%"
+              }
+            },
+            {
+              "path": "/decorations/heart.png",
+              "width": 400,
+              "height": 400,
+              "position": {
+                "bottom": "0",
+                "right": "20%"
+              }
+            }
+          ],
+          "content": {
+            "title": "План дня",
+            "type": "TIME_LINE",
+            "plan": [
+              {
+                "event": "Церемония",
+                "description": "",
+                "startTime": "14:00",
+                "icon": {
+                  "path": "icons/gem.svg",
+                  "width": 64,
+                  "height": 64
+                }
+              },
+              {
+                "event": "Сбор гостей",
+                "description": "",
+                "startTime": "16:00",
+                "icon": {
+                  "path": "icons/map.svg",
+                  "width": 64,
+                  "height": 64
+                }
+              },
+              {
+                "event": "Начало торжества",
+                "description": "",
+                "startTime": "16:30",
+                "icon": {
+                  "path": "icons/bottle.svg",
+                  "width": 64,
+                  "height": 64
+                }
+              },
+              {
+                "event": "Свадебный торт",
+                "description": "",
+                "startTime": "20:00",
+                "icon": {
+                  "path": "icons/cake.svg",
+                  "width": 64,
+                  "height": 64
+                }
+              },
+              {
+                "event": "Завершение торжества",
+                "description": "",
+                "startTime": "21:00",
+                "icon": {
+                  "path": "icons/sparkles.svg",
+                  "width": 64,
+                  "height": 64
+                }
+              }
+            ]
+          }
+        },
+        {
+          "contentType": "DETAILS",
+          "decorations": [
+            {
+              "path": "/decorations/cat.png",
+              "width": 400,
+              "height": 400,
+              "position": {
+                "top": "35%",
+                "left": "10%"
+              }
+            }
+          ],
+          "content": {
+            "title": "Детали",
+            "align": "center",
+            "details": [
+              {
+                "detail": "Ваше присутствие и хорошее настроение — вот что для нас важнее всего. А лучшие подарки, как известно, приходят в конвертах.",
+                "title": "Подарки"
+              },
+              {
+                "detail": "Просим с пониманием отнестись к нашему пожеланию: мы хотели бы обойтись без традиционных криков \"Горько!\". Для нас поцелуй — это проявление искренних чувств, а не игра по команде.",
+                "title": "Традиции"
+              },
+              {
+                "detail": "Будем рады, если вы поддержите цветовую гамму нашего торжества. Рекомендуемая палитра указана ниже.",
+                "title": "Дресс-код"
+              },
+              {
+                "detail": "Если ваши планы изменятся, и вы не сможете присутствовать на торжестве, просим сообщить нам об этом заранее.",
+                "title": "Подтверждение"
+              }
+            ]
+          }
+        },
+        {
+          "contentType": "DRESSCODE",
+          "content": {
+            "title": "Дресскод",
+            "colorSchema": [
+              {
+                "id": "pink",
+                "onlyForFemale": true,
+                "colorImage": "/dresscode/pink_color.jpg",
+                "femaleDressCodeImg": "/dresscode/pink_female_dress.png"
+              },
+              {
+                "id": "light_pink",
+                "onlyForFemale": true,
+                "colorImage": "/dresscode/light_pink_color.jpg",
+                "femaleDressCodeImg": "/dresscode/light_pink_dress.png"
+              },
+              {
+                "id": "brown",
+                "colorImage": "/dresscode/brown_color.jpg",
+                "maleDressCodeImg": "/dresscode/male_brown_dress.png",
+                "femaleDressCodeImg": "/dresscode/female_brown_dress.png"
+              },
+              {
+                "id": "blue",
+                "colorImage": "/dresscode/blue_color.jpg",
+                "maleDressCodeImg": "/dresscode/blue_male_dress.png",
+                "femaleDressCodeImg": "/dresscode/female_blue_dress.png"
+              },
+              {
+                "id": "green",
+                "colorImage": "/dresscode/green_color.jpg",
+                "maleDressCodeImg": "/dresscode/male_green_dress.png",
+                "femaleDressCodeImg": "/dresscode/female_green_dress.png"
+              },
+              {
+                "id": "black",
+                "colorImage": "/dresscode/black_color.jpg",
+                "maleDressCodeImg": "/dresscode/male_black_dress.png",
+                "onlyForMale": true
+              }
+            ]
+          }
+        },
+        {
+          "contentType": "FORM",
+          "decorations": [
+            {
+              "path": "/decorations/heart.png",
+              "width": 400,
+              "height": 400,
+              "position": {
+                "top": "0px",
+                "left": "20%"
+              },
+              "className": "rotate-[300deg]"
+            },
+            {
+              "path": "/decorations/cats.png",
+              "width": 500,
+              "height": 500,
+              "position": {
+                "top": "35%",
+                "right": "10%"
+              }
+            }
+          ],
+          "content": [
+            {
+              "type": "input",
+              "required": true,
+              "placeholder": "Укажите ваше ФИО",
+              "name": "personlName",
+              "label": "Ваше имя",
+              "defaultValue": "",
+              "hint": ""
+            },
+            {
+              "type": "radio_group",
+              "required": true,
+              "name": "attend",
+              "label": "Сможете ли вы присутствовать на нашем торжестве?",
+              "fields": [
+                {
+                  "value": "yes",
+                  "label": "Смогу прийти с радостью!"
+                },
+                {
+                  "value": "no",
+                  "label": "К сожалению, не смогу :("
+                }
+              ],
+              "hint": ""
+            },
+            {
+              "type": "select",
+              "label": "Кем приходитесь молодожёнам:",
+              "name": "status",
+              "required": true,
+              "placeholder": "",
+              "defaultValue": "",
+              "fields": [
+                {
+                  "label": "Родственник",
+                  "value": "familly"
+                },
+                {
+                  "label": "Лучший друг",
+                  "value": "bestFriend"
+                },
+                {
+                  "label": "Друг",
+                  "value": "friend"
+                }
+              ],
+              "hint": ""
+            },
+            {
+              "type": "textarea",
+              "label": "Расскажите немного о себе:",
+              "name": "about",
+              "required": false,
+              "placeholder": "",
+              "defaultValue": "Выберите из списка",
+              "hint": "Темперамент: веселый, активный, скромный, спокойный, не любит лишнего внимания и т.д.\n\nЧем занимаетесь / хобби / интересные факты"
+            },
+            {
+              "type": "textarea",
+              "label": "Забавная или интересная история связанная с  молодожёнами",
+              "name": "history",
+              "required": false,
+              "placeholder": "",
+              "defaultValue": "",
+              "hint": ""
+            },
+            {
+              "type": "select",
+              "label": "Взаимодействие с ведущим 🎤",
+              "name": "activity",
+              "required": true,
+              "placeholder": "",
+              "defaultValue": "",
+              "hint": "",
+              "fields": [
+                {
+                  "value": "vibe",
+                  "label": "Ловлю вайб, можно звать в конкурсы и активности"
+                },
+                {
+                  "value": "little",
+                  "label": "Можно аккуратно, без фанатизма"
+                },
+                {
+                  "value": "never",
+                  "label": "Лучше не привлекать к активностям"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "shared": {
+        "date": "20.06.2026",
+        "wifeName": "Полина",
+        "husbandName": "Никита",
+        "textDate": "20 июня 2026 года",
+        "backgroundImage": "/images/background_v2.jpg"
+      },
+      "footer": {
+        "baseText": "До встречи",
+        "defaultWhenNoNames": "!",
+        "single": {
+          "base": "дорог",
+          "maleEnding": "ой",
+          "femaleEnding": "ая",
+          "template": ", {base}{ending} {name}!"
+        },
+        "plural": {
+          "text": "дорогие",
+          "separator": " & ",
+          "template": ", {text} {male}{separator}{female}!"
+        },
+        "pairSeparator": "",
+        "alwaysText": "",
+        "genderConfig": {
+          "maleEnding": "",
+          "femaleEnding": "",
+          "pluralText": "",
+          "singleBase": ""
+        }
+      }
+    },
+    "isActive": true
+  }
+]
