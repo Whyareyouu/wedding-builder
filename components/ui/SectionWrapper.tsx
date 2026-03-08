@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 
 type Props = {
   className?: HTMLElement["className"];
   decorations?: ILayout["decorations"];
+  groupId?: string;
 };
 
 export const SectionWrapper = ({ children, className, decorations }: React.PropsWithChildren<Props>) => {
@@ -53,12 +54,55 @@ export const SectionWrapper = ({ children, className, decorations }: React.Props
     return sectionTop + "px";
   };
 
+  const resolveHorizontalPosition = (
+    position: ISectionDecorations["position"],
+    rect: DOMRect,
+    elementWidth: number,
+  ) => {
+    if (!position.left && !position.right) {
+      return { left: "0px", right: "0px" };
+    }
+
+    const windowWidth = document.body.getBoundingClientRect().width;
+
+    if (position.left) {
+      const leftCord = windowWidth * (parseFloat(position.left) / 100);
+      const elementRightEdge = leftCord + elementWidth;
+
+      // Если декорация наезжает на секцию — сдвигаем влево
+      if (elementRightEdge >= rect.left) {
+        const overlap = Math.ceil(elementRightEdge - rect.left);
+        return { left: `${Math.ceil(leftCord - overlap)}px` };
+      }
+
+      return { left: `${leftCord}px` };
+    }
+
+    if (position.right) {
+      const rightCord = windowWidth * (parseFloat(position.right) / 100);
+      const elementLeftEdge = windowWidth - rightCord - elementWidth;
+
+      // Если декорация наезжает на секцию — сдвигаем вправо
+      if (elementLeftEdge <= rect.right) {
+        const overlap = Math.ceil(rect.right - elementLeftEdge);
+        return { right: `${Math.ceil(rightCord - overlap)}px` };
+      }
+
+      return { right: `${rightCord}px` };
+    }
+  };
+
   const portalLayer =
     rect && (decorations || []).length > 0
       ? createPortal(
           <>
             {decorations!.map((decoration, index) => {
               const computedTop = resolveVerticalPosition(decoration.position, rect, decoration.height);
+
+              if (decoration.position.left) {
+                return null;
+              }
+              const computedHorizontal = resolveHorizontalPosition(decoration.position, rect, decoration.width);
 
               return (
                 <div
@@ -67,8 +111,8 @@ export const SectionWrapper = ({ children, className, decorations }: React.Props
                   style={{
                     position: "absolute",
                     top: computedTop,
-                    left: decoration.position.left,
-                    right: decoration.position.right,
+                    left: computedHorizontal?.left,
+                    right: computedHorizontal?.right,
                     zIndex: 0,
                   }}
                 >
