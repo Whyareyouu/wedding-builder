@@ -171,7 +171,6 @@ export const SectionWrapper = ({
                 );
               }
 
-              // Desktop — без left-декораций (как было), с overlap-коррекцией
               const computedTop = resolveVerticalPosition(decoration.position, rect, decoration.height);
 
               const computedHorizontal = resolveHorizontalPosition(decoration.position, rect, decoration.width);
