@@ -210,7 +210,7 @@
               {
                 "event": "Сбор гостей",
                 "description": "",
-                "startTime": "16:00",
+                "startTime": "16:30",
                 "icon": {
                   "path": "icons/map.svg",
                   "width": 64,
@@ -220,7 +220,7 @@
               {
                 "event": "Начало торжества",
                 "description": "",
-                "startTime": "16:30",
+                "startTime": "17:00",
                 "icon": {
                   "path": "icons/bottle.svg",
                   "width": 64,
@@ -360,8 +360,7 @@
               "placeholder": "Укажите ваше ФИО",
               "name": "personlName",
               "label": "Ваше имя",
-              "defaultValue": "",
-              "hint": ""
+              "defaultValue": ""
             },
             {
               "type": "radio_group",
@@ -377,8 +376,7 @@
                   "value": "no",
                   "label": "К сожалению, не смогу :("
                 }
-              ],
-              "hint": ""
+              ]
             },
             {
               "type": "select",
@@ -400,8 +398,7 @@
                   "label": "Друг",
                   "value": "friend"
                 }
-              ],
-              "hint": ""
+              ]
             },
             {
               "type": "textarea",
@@ -409,7 +406,6 @@
               "name": "about",
               "required": false,
               "placeholder": "",
-              "defaultValue": "Выберите из списка",
               "hint": "Темперамент: веселый, активный, скромный, спокойный, не любит лишнего внимания и т.д.\n\nЧем занимаетесь / хобби / интересные факты"
             },
             {
@@ -441,6 +437,22 @@
                 {
                   "value": "never",
                   "label": "Лучше не привлекать к активностям"
+                }
+              ]
+            },
+            {
+              "type": "select",
+              "label": "Присутствие в ЗАГСе",
+              "name": "activity",
+              "required": true,
+              "fields": [
+                {
+                  "value": "yes",
+                  "label": "Хочу присутствовать на церемонии ❤"
+                },
+                {
+                  "value": "no",
+                  "label": "Приеду сразу на банкет"
                 }
               ]
             }
