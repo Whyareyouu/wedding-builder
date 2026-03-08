@@ -1,5 +1,6 @@
 import fsPromises from "fs/promises";
 import path from "path";
+import { checkAdminAccess } from "@/lib/auth";
 
 const DATA_FILE_PATH = path.join(process.cwd(), "configs", "app-config_with_versions.json");
 
@@ -9,6 +10,9 @@ interface Template {
 }
 
 export async function POST(req: Request): Promise<Response> {
+  const accessDenied = checkAdminAccess();
+  if (accessDenied) return accessDenied;
+
   try {
     const rawData = await fsPromises.readFile(DATA_FILE_PATH);
     let objectData: Template[] = JSON.parse(rawData.toString());
@@ -45,6 +49,12 @@ export async function GET(request: Request): Promise<Response> {
   try {
     const { searchParams } = new URL(request.url);
     const wantActiveOnly = searchParams.get("active") === "true";
+
+    // Получение активного шаблона доступно всем
+    if (!wantActiveOnly) {
+      const accessDenied = checkAdminAccess();
+      if (accessDenied) return accessDenied;
+    }
 
     const rawData = await fsPromises.readFile(DATA_FILE_PATH);
     const templates: Template[] = JSON.parse(rawData.toString());
