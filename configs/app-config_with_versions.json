@@ -598,7 +598,7 @@
             {
               "type": "input",
               "required": true,
-              "placeholder": "Укажите ваше ФИО",
+              "placeholder": "Укажите ваше ФИО (если несколько — через запятую)",
               "name": "personlName",
               "label": "Ваше имя",
               "defaultValue": ""

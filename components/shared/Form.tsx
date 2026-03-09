@@ -74,7 +74,7 @@ const CustomFieldLabel = ({
     <FieldLabel htmlFor={name}>
       {hint && (
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger type="button">
             <InfoIcon />
           </TooltipTrigger>
           <TooltipContent>
@@ -233,6 +233,7 @@ export const Form = ({ formData, decorations, laptopDecorations, mobileDecoratio
           <Controller
             control={control}
             defaultValue={typedMetaField.defaultValue || ""}
+            key={typedMetaField.name}
             name={typedMetaField.name}
             rules={{ required: typedMetaField?.required }}
             render={({ fieldState, field }) => (
@@ -299,7 +300,11 @@ export const Form = ({ formData, decorations, laptopDecorations, mobileDecoratio
   };
 
   return (
-    <SectionWrapper decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations}>
+    <SectionWrapper
+      decorations={decorations}
+      laptopDecorations={laptopDecorations}
+      mobileDecorations={mobileDecorations}
+    >
       <Typography font="GreatVibes" fontSize="title">
         Анкета
       </Typography>
