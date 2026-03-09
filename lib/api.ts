@@ -1,4 +1,12 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api"; // в продакшене обычно '/api'
+function getBaseUrl(): string {
+  if (typeof window !== "undefined") {
+    return `${window.location.origin}/api`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}/api`;
+  }
+  return `http://localhost:${process.env.PORT ?? 3000}/api`;
+}
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -9,7 +17,7 @@ export interface ApiResponse<T> {
 export class ApiClient {
   private baseUrl: string;
 
-  constructor(baseUrl: string = BASE_URL) {
+  constructor(baseUrl: string = getBaseUrl()) {
     this.baseUrl = baseUrl;
   }
 
