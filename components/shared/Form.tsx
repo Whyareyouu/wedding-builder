@@ -99,6 +99,12 @@ const CustomFieldLabel = ({
 export const Form = ({ formData, guestName, decorations, laptopDecorations, mobileDecorations }: FormProps) => {
   const { handleSubmit, control } = useForm();
 
+  const onError = () => {
+    toast.warning("Заполните все обязательные поля", {
+      description: "Пожалуйста, проверьте форму и попробуйте снова.",
+    });
+  };
+
   const onSubmit = async (data: Record<string, unknown>) => {
     const mappedData = transformData(formData, data);
 
@@ -327,7 +333,7 @@ export const Form = ({ formData, guestName, decorations, laptopDecorations, mobi
       <Typography font="GreatVibes" fontSize="title">
         Анкета
       </Typography>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
+      <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col gap-4 w-full">
         {formData.map((formField) => renderForm(formField))}
         <Button type="submit" variant="default" className="rounded-3xl max-w-72 w-full self-center py-8">
           <Typography font="Cormorant" fontSize="xxl">
