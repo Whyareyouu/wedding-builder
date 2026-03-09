@@ -11,7 +11,7 @@ import { DressCode } from "@/components/shared/DressCode";
 import { FormStructure } from "@/types/blocks/form";
 import { Form } from "./Form";
 import { Footer } from "@/components/shared/Footer";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import { Calendar } from "@/components/shared/Calendar";
 import { IFrame } from "@/types/blocks/frame";
 import { PhotoFrame } from "@/components/shared/PhotoFrame";
@@ -127,7 +127,9 @@ export const InviteBuilder = ({ config }: InviteBuilderProps) => {
           </Fragment>
         ))}
       </main>
-      <Footer date={config.shared.date} footerSettings={config?.footer} />
+      <Suspense>
+        <Footer date={config.shared.date} footerSettings={config?.footer} />
+      </Suspense>
     </Wrapper>
   );
 };
