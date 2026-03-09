@@ -20,7 +20,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { InfoIcon } from "lucide-react";
-import { ILayout, ISectionDecorations } from "@/types/blocks/config";
+import { ILayout } from "@/types/blocks/config";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -35,7 +35,7 @@ const transformData = (formMetadata: FormStructure[], data: Record<string, unkno
   const result: Record<string, unknown> = {};
 
   for (const field of formMetadata) {
-    if (field?.type === "input") {
+    if (field?.type === "input" || field.type === "textarea") {
       result[field.name] = data?.[field.name] || null;
     }
 
@@ -81,10 +81,7 @@ const CustomFieldLabel = ({
           <TooltipTrigger type="button" onClick={() => setOpen((prev) => !prev)}>
             <InfoIcon />
           </TooltipTrigger>
-          <TooltipContent
-            className="max-w-[min(320px,calc(100vw-32px))] whitespace-pre-wrap"
-            collisionPadding={16}
-          >
+          <TooltipContent className="max-w-[min(320px,calc(100vw-32px))] whitespace-pre-wrap" collisionPadding={16}>
             <Typography font="Cormorant" fontSize="xl">
               {hint}
             </Typography>
