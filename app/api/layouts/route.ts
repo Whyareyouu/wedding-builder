@@ -50,12 +50,6 @@ export async function GET(request: Request): Promise<Response> {
     const { searchParams } = new URL(request.url);
     const wantActiveOnly = searchParams.get("active") === "true";
 
-    // Получение активного шаблона доступно всем
-    if (!wantActiveOnly) {
-      const accessDenied = checkAdminAccess();
-      if (accessDenied) return accessDenied;
-    }
-
     const rawData = await fsPromises.readFile(DATA_FILE_PATH);
     const templates: Template[] = JSON.parse(rawData.toString());
 
