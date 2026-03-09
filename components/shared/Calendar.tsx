@@ -11,7 +11,8 @@ import { ILayout } from "@/types/blocks/config";
 type CalendarProps = {
   targetDate: string;
   decorations?: ILayout["decorations"];
-  mobileDecorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["laptopDecorations"];
+  mobileDecorations?: ILayout["mobileDecorations"];
 };
 
 const WEEK_DAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
@@ -47,7 +48,7 @@ const getMonthData = (date: Date): { year: number; month: number; days: (number 
   return { year, month, days };
 };
 
-export const Calendar = ({ targetDate, decorations, mobileDecorations }: CalendarProps) => {
+export const Calendar = ({ targetDate, decorations, laptopDecorations, mobileDecorations }: CalendarProps) => {
   const date = useMemo(() => parseDate(targetDate), [targetDate]);
   const selectedDay = date.getDate();
 
@@ -56,7 +57,7 @@ export const Calendar = ({ targetDate, decorations, mobileDecorations }: Calenda
   const monthName = date.toLocaleString("ru-RU", { month: "long" });
 
   return (
-    <SectionWrapper decorations={decorations} mobileDecorations={mobileDecorations}>
+    <SectionWrapper decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations}>
       <div className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl ">
         <div className="text-center mb-4 flex justify-between items-center">
           <Typography className="capitalize italic text-justify" fontSize="xxl" font="Cormorant">

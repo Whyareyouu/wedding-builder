@@ -17,6 +17,7 @@ export interface ILayout {
   contentType: ContentTypes;
   content: LayoutContent;
   decorations?: ISectionDecorations[];
+  laptopDecorations?: ISectionDecorations[];
   mobileDecorations?: ISectionDecorations[];
 }
 

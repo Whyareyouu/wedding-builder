@@ -8,10 +8,11 @@ import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 type DetailsProps = {
   content: IDetails;
   decorations?: ILayout["decorations"];
-  mobileDecorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["laptopDecorations"];
+  mobileDecorations?: ILayout["mobileDecorations"];
 };
 
-export const Details = ({ content, decorations, mobileDecorations }: DetailsProps) => {
+export const Details = ({ content, decorations, laptopDecorations, mobileDecorations }: DetailsProps) => {
   const alignmentClasses = {
     center: "items-center text-center",
     left: "items-start text-left",
@@ -22,6 +23,7 @@ export const Details = ({ content, decorations, mobileDecorations }: DetailsProp
     <SectionWrapper
       className={alignmentClasses[content?.align ?? "left"]}
       decorations={decorations}
+      laptopDecorations={laptopDecorations}
       mobileDecorations={mobileDecorations}
     >
       <motion.div

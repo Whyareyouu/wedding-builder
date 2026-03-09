@@ -14,10 +14,11 @@ import { X } from "lucide-react";
 type DressCodeProps = {
   dresscode: IDressCode;
   decorations?: ILayout["decorations"];
-  mobileDecorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["laptopDecorations"];
+  mobileDecorations?: ILayout["mobileDecorations"];
 };
 
-export const DressCode = ({ dresscode, decorations, mobileDecorations }: DressCodeProps) => {
+export const DressCode = ({ dresscode, decorations, laptopDecorations, mobileDecorations }: DressCodeProps) => {
   const [selectedColor, setSelectedColor] = useState<ColorSchemaItem | null>(null);
   const [modalImage, setModalImage] = useState<string | null>(null);
 
@@ -31,7 +32,7 @@ export const DressCode = ({ dresscode, decorations, mobileDecorations }: DressCo
   };
 
   return (
-    <SectionWrapper decorations={decorations} mobileDecorations={mobileDecorations}>
+    <SectionWrapper decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations}>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

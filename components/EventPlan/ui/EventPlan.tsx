@@ -13,10 +13,11 @@ import { ILayout } from "@/types/blocks/config";
 type EventPlanProps = {
   content: IEvent;
   decorations?: ILayout["decorations"];
-  mobileDecorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["laptopDecorations"];
+  mobileDecorations?: ILayout["mobileDecorations"];
 };
 
-export const EventPlan = ({ content, decorations, mobileDecorations }: EventPlanProps) => {
+export const EventPlan = ({ content, decorations, laptopDecorations, mobileDecorations }: EventPlanProps) => {
   const vlanVariant = useMemo(() => {
     switch (content?.type) {
       case "CARD":
@@ -29,7 +30,7 @@ export const EventPlan = ({ content, decorations, mobileDecorations }: EventPlan
   }, [content]);
 
   return (
-    <SectionWrapper decorations={decorations} mobileDecorations={mobileDecorations}>
+    <SectionWrapper decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations}>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

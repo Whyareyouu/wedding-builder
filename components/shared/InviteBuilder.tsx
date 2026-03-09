@@ -24,49 +24,55 @@ type InviteBuilderProps = {
 const renderCalendar = (
   shared: IShared,
   decorations?: ILayout["decorations"],
-  mobileDecorations?: ILayout["decorations"],
+  laptopDecorations?: ILayout["laptopDecorations"],
+  mobileDecorations?: ILayout["mobileDecorations"],
 ) => {
-  return <Calendar targetDate={shared.date} decorations={decorations} mobileDecorations={mobileDecorations} />;
+  return <Calendar targetDate={shared.date} decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations} />;
 };
 
 const renderPlace = (
   content: IPlace,
   decorations?: ILayout["decorations"],
-  mobileDecorations?: ILayout["decorations"],
+  laptopDecorations?: ILayout["laptopDecorations"],
+  mobileDecorations?: ILayout["mobileDecorations"],
 ) => {
-  return <Place content={content} decorations={decorations} mobileDecorations={mobileDecorations} />;
+  return <Place content={content} decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations} />;
 };
 
 const renderTimings = (
   content: IEvent,
   decorations?: ILayout["decorations"],
-  mobileDecorations?: ILayout["decorations"],
+  laptopDecorations?: ILayout["laptopDecorations"],
+  mobileDecorations?: ILayout["mobileDecorations"],
 ) => {
-  return <EventPlan content={content} decorations={decorations} mobileDecorations={mobileDecorations} />;
+  return <EventPlan content={content} decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations} />;
 };
 
 const renderDetails = (
   content: IDetails,
   decorations?: ILayout["decorations"],
-  mobileDecorations?: ILayout["decorations"],
+  laptopDecorations?: ILayout["laptopDecorations"],
+  mobileDecorations?: ILayout["mobileDecorations"],
 ) => {
-  return <Details content={content as IDetails} decorations={decorations} mobileDecorations={mobileDecorations} />;
+  return <Details content={content as IDetails} decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations} />;
 };
 
 const renderDresscode = (
   content: IDressCode,
   decorations?: ILayout["decorations"],
-  mobileDecorations?: ILayout["decorations"],
+  laptopDecorations?: ILayout["laptopDecorations"],
+  mobileDecorations?: ILayout["mobileDecorations"],
 ) => {
-  return <DressCode dresscode={content} decorations={decorations} mobileDecorations={mobileDecorations} />;
+  return <DressCode dresscode={content} decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations} />;
 };
 
 const renderForm = (
   content: FormStructure[],
   decorations?: ILayout["decorations"],
-  mobileDecorations?: ILayout["decorations"],
+  laptopDecorations?: ILayout["laptopDecorations"],
+  mobileDecorations?: ILayout["mobileDecorations"],
 ) => {
-  return <Form formData={content} decorations={decorations} mobileDecorations={mobileDecorations} />;
+  return <Form formData={content} decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations} />;
 };
 
 const renderFrame = (content: IFrame) => {
@@ -77,23 +83,24 @@ const renderContent = (
   layout: ILayout,
   shared: IShared,
   decorations?: ILayout["decorations"],
-  mobileDecorations?: ILayout["decorations"],
+  laptopDecorations?: ILayout["laptopDecorations"],
+  mobileDecorations?: ILayout["mobileDecorations"],
 ) => {
   const { content, contentType } = layout;
 
   switch (contentType) {
     case "DETAILS":
-      return renderDetails(content as IDetails, decorations, mobileDecorations);
+      return renderDetails(content as IDetails, decorations, laptopDecorations, mobileDecorations);
     case "DRESSCODE":
-      return renderDresscode(content as IDressCode, decorations, mobileDecorations);
+      return renderDresscode(content as IDressCode, decorations, laptopDecorations, mobileDecorations);
     case "FORM":
-      return renderForm(content as FormStructure[], decorations, mobileDecorations);
+      return renderForm(content as FormStructure[], decorations, laptopDecorations, mobileDecorations);
     case "CALENDAR":
-      return renderCalendar(shared, decorations, mobileDecorations);
+      return renderCalendar(shared, decorations, laptopDecorations, mobileDecorations);
     case "PLACE":
-      return renderPlace(content as IPlace, decorations, mobileDecorations);
+      return renderPlace(content as IPlace, decorations, laptopDecorations, mobileDecorations);
     case "TIMINGS":
-      return renderTimings(content as IEvent, decorations, mobileDecorations);
+      return renderTimings(content as IEvent, decorations, laptopDecorations, mobileDecorations);
     case "FRAME":
       return renderFrame(content as IFrame);
     default:
@@ -116,7 +123,7 @@ export const InviteBuilder = ({ config }: InviteBuilderProps) => {
       <main>
         {config.layout.map((layout, index) => (
           <Fragment key={index}>
-            {renderContent(layout, config.shared, layout?.decorations, layout?.mobileDecorations)}
+            {renderContent(layout, config.shared, layout?.decorations, layout?.laptopDecorations, layout?.mobileDecorations)}
           </Fragment>
         ))}
       </main>

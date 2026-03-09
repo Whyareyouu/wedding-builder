@@ -25,7 +25,8 @@ import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 type FormProps = {
   formData: FormStructure[];
   decorations?: ILayout["decorations"];
-  mobileDecorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["laptopDecorations"];
+  mobileDecorations?: ILayout["mobileDecorations"];
 };
 
 const transformData = (formMetadata: FormStructure[], data: Record<string, unknown>) => {
@@ -90,7 +91,7 @@ const CustomFieldLabel = ({
   );
 };
 
-export const Form = ({ formData, decorations, mobileDecorations }: FormProps) => {
+export const Form = ({ formData, decorations, laptopDecorations, mobileDecorations }: FormProps) => {
   const { handleSubmit, control } = useForm();
 
   const onSubmit = async (data: Record<string, unknown>) => {
@@ -298,7 +299,7 @@ export const Form = ({ formData, decorations, mobileDecorations }: FormProps) =>
   };
 
   return (
-    <SectionWrapper decorations={decorations} mobileDecorations={mobileDecorations}>
+    <SectionWrapper decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations}>
       <Typography font="GreatVibes" fontSize="title">
         Анкета
       </Typography>
