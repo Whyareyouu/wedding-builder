@@ -22,6 +22,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { InfoIcon } from "lucide-react";
 import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type FormProps = {
   formData: FormStructure[];
@@ -101,17 +102,29 @@ export const Form = ({ formData, decorations, laptopDecorations, mobileDecoratio
   const { handleSubmit, control } = useForm();
 
   const onSubmit = async (data: Record<string, unknown>) => {
-    console.log(data);
-
     const mappedData = transformData(formData, data);
 
-    const response = await fetch("api/sheets", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(mappedData),
-    });
+    try {
+      const response = await fetch("api/sheets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedData),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      toast.success("Анкета отправлена!", {
+        description: "Мы получили ваш ответ. Спасибо!",
+      });
+    } catch {
+      toast.error("Не удалось отправить анкету", {
+        description: "Попробуйте ещё раз или свяжитесь с нами напрямую.",
+      });
+    }
   };
 
   const renderForm = (metaFormField: FormStructure) => {
