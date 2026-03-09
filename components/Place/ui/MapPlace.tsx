@@ -59,7 +59,7 @@ export const MapPlace = ({ place, isRight, isLastElement }: MapPlaceProps) => {
         className="rounded-2xl overflow-hidden shadow-lg"
       >
         <ShadcnMap center={place.mapSettings.coordinates as [number, number]} zoom={place.mapSettings?.zoom ?? 18}>
-          <MapTileLayer />
+          <MapTileLayer darkUrl="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" />
           <MapZoomControl />
           <MapLocateControl />
           <MapMarker
@@ -74,7 +74,7 @@ export const MapPlace = ({ place, isRight, isLastElement }: MapPlaceProps) => {
               <MapPopup>
                 <div className="flex flex-col">{place.mapSettings.hint}</div>
                 {place.mapSettings?.yandexMapUrl && (
-                  <Button asChild className="mt-4">
+                  <Button asChild className="mt-4" variant="secondary">
                     <a
                       href={place.mapSettings.yandexMapUrl}
                       target="_blank"

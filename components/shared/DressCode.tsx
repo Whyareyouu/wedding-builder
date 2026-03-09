@@ -5,28 +5,38 @@ import { Typography } from "@/components/ui/Typography";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { IDressCode } from "@/types/blocks/dresscode";
-
-type ColorSchemaItem = {
-  color: string;
-  maleDressCodeImg: string;
-  femaleDressCodeImg: string;
-};
+import { ColorSchemaItem, IDressCode } from "@/types/blocks/dresscode";
+import { ILayout } from "@/types/blocks/config";
+import { Dialog, DialogClose, DialogPortal, DialogOverlay } from "@/components/ui/dialog";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
 
 type DressCodeProps = {
   dresscode: IDressCode;
+  decorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["laptopDecorations"];
+  mobileDecorations?: ILayout["mobileDecorations"];
 };
 
-export const DressCode = ({ dresscode }: DressCodeProps) => {
+export const DressCode = ({ dresscode, decorations, laptopDecorations, mobileDecorations }: DressCodeProps) => {
   const [selectedColor, setSelectedColor] = useState<ColorSchemaItem | null>(null);
+  const [modalImage, setModalImage] = useState<string | null>(null);
 
   const imageVariants = {
     hidden: { opacity: 0, x: -20 },
     visible: { opacity: 1, x: 0 },
   };
 
+  const handleImageClick = (imageSrc: string) => {
+    setModalImage(imageSrc);
+  };
+
   return (
-    <SectionWrapper>
+    <SectionWrapper
+      decorations={decorations}
+      laptopDecorations={laptopDecorations}
+      mobileDecorations={mobileDecorations}
+    >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -41,7 +51,7 @@ export const DressCode = ({ dresscode }: DressCodeProps) => {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
         {dresscode.colorSchema.map((item, index) => (
           <motion.div
-            key={item.color}
+            key={item.id}
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{
@@ -51,14 +61,26 @@ export const DressCode = ({ dresscode }: DressCodeProps) => {
             }}
             viewport={{ once: true }}
             whileHover={{ scale: 1.08 }}
-            onClick={() => setSelectedColor((prev) => (item.color === prev?.color ? null : item))}
+            onClick={() => setSelectedColor((prev) => (item.id === prev?.id ? null : item))}
             className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 ${
-              item.color === selectedColor?.color
+              item.id === selectedColor?.id
                 ? "ring-2 ring-[#C6A769] ring-offset-4 ring-offset-white shadow-xl"
                 : "ring-1 ring-transparent hover:ring-[#C6A769]/40"
             }`}
           >
-            <div className="w-32 h-16 rounded-2xl" style={{ backgroundColor: item.color }} />
+            {item.colorImage ? (
+              <div className="w-40 h-20 rounded-2xl relative">
+                <Image
+                  src={item.colorImage}
+                  alt="Цветовая схема"
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-2xl"
+                />
+              </div>
+            ) : (
+              <div className="w-40 h-20 rounded-2xl" style={{ backgroundColor: item.color }} />
+            )}
             <div className="absolute inset-0 bg-black/5" />
           </motion.div>
         ))}
@@ -66,23 +88,95 @@ export const DressCode = ({ dresscode }: DressCodeProps) => {
 
       {selectedColor && (
         <motion.div
-          key={selectedColor.color}
+          key={selectedColor.id}
           initial="hidden"
           animate="visible"
           variants={{
             visible: { transition: { staggerChildren: 0.15 } },
           }}
-          className="flex flex-col sm:flex-row items-center gap-8 mt-8"
+          className="flex flex-col sm:flex-row items-center justify-center gap-8 mt-8"
         >
-          <motion.div variants={imageVariants} className="w-80 h-96 relative rounded-2xl overflow-hidden shadow-lg">
-            <Image src={selectedColor.maleDressCodeImg} alt="Мужской аутфит" fill style={{ objectFit: "cover" }} />
-          </motion.div>
+          {!selectedColor.onlyForFemale && selectedColor.maleDressCodeImg && (
+            <motion.div
+              variants={imageVariants}
+              className="w-80 h-96 relative rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
+              onClick={() => handleImageClick(selectedColor.maleDressCodeImg!)}
+            >
+              <Image src={selectedColor.maleDressCodeImg} alt="Мужской аутфит" fill style={{ objectFit: "cover" }} />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                    <line x1="11" y1="8" x2="11" y2="14" />
+                    <line x1="8" y1="11" x2="14" y2="11" />
+                  </svg>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
-          <motion.div variants={imageVariants} className="w-80 h-96 relative rounded-2xl overflow-hidden shadow-lg">
-            <Image src={selectedColor.femaleDressCodeImg} alt="Женский аутфит" fill style={{ objectFit: "cover" }} />
-          </motion.div>
+          {/* Женский образ */}
+          {!selectedColor.onlyForMale && selectedColor.femaleDressCodeImg && (
+            <motion.div
+              variants={imageVariants}
+              className="w-80 h-96 relative rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
+              onClick={() => handleImageClick(selectedColor.femaleDressCodeImg!)}
+            >
+              <Image src={selectedColor.femaleDressCodeImg} alt="Женский аутфит" fill style={{ objectFit: "cover" }} />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                    <line x1="11" y1="8" x2="11" y2="14" />
+                    <line x1="8" y1="11" x2="14" y2="11" />
+                  </svg>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
       )}
+
+      {/* Модальное окно для просмотра изображения */}
+      <Dialog open={!!modalImage} onOpenChange={(open) => !open && setModalImage(null)}>
+        <DialogPortal>
+          <DialogOverlay className="bg-black/80" />
+          <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-[95vw] max-h-[95vh] translate-x-[-50%] translate-y-[-50%] p-0 overflow-hidden border-none focus:outline-none">
+            <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 hover:bg-white/20 transition-colors backdrop-blur-sm">
+              <X className="h-6 w-6 text-white" />
+              <span className="sr-only">Закрыть</span>
+            </DialogClose>
+
+            {modalImage && (
+              <div className="relative w-full h-[95vh] flex items-center justify-center">
+                <Image src={modalImage} alt="Просмотр образа" fill style={{ objectFit: "contain" }} className="p-4" />
+              </div>
+            )}
+          </DialogPrimitive.Content>
+        </DialogPortal>
+      </Dialog>
     </SectionWrapper>
   );
 };

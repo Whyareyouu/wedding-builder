@@ -3,15 +3,16 @@ import { Marck_Script, Great_Vibes, Cormorant_Garamond } from "next/font/google"
 
 type fontVariants = "MarckScript" | "GreatVibes" | "Cormorant";
 
+// Responsive размеры: мобильный (по умолчанию) -> десктопный (sm:)
 const sizes = {
-  xs: "text-xs",
-  sm: "text-sm",
-  md: "text-md",
-  lg: "text-lg",
-  xl: "text-xl",
-  xxl: "text-xxl",
-  subtitle: "text-subtitle",
-  title: "text-title",
+  xs: "text-xs sm:text-xs", // xs остается xs на всех экранах
+  sm: "text-xs sm:text-sm",
+  md: "text-sm sm:text-md",
+  lg: "text-md sm:text-lg",
+  xl: "text-lg sm:text-xl",
+  xxl: "text-xl sm:text-xxl",
+  subtitle: "text-xl sm:text-subtitle",
+  title: "text-subtitle sm:text-title",
 } as const;
 
 type TypographyProps = {
@@ -48,7 +49,6 @@ export const Typography = ({
   children,
   className,
 }: React.PropsWithChildren<TypographyProps>) => {
-  // const Tag = asChild ?? "span";
   const selectedFont = useMemo(() => {
     switch (font) {
       case "MarckScript":

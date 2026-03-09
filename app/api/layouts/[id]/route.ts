@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import fsPromises from "fs/promises";
 import path from "path";
+import { checkAdminAccess } from "@/lib/auth";
 
 const DATA_FILE_PATH = path.join(process.cwd(), "configs", "app-config_with_versions.json");
 
@@ -10,6 +11,9 @@ interface Template {
 }
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const accessDenied = checkAdminAccess();
+  if (accessDenied) return accessDenied;
+
   try {
     const { id } = await context.params;
 

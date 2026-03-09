@@ -43,7 +43,7 @@ type Template = {
   id: string;
   title: string;
   isActive: boolean;
-  content: IConfigApp; // массив блоков с id
+  content: IConfigApp;
 };
 
 const NEW_LAYOUT_ID = "new_layout";
@@ -326,6 +326,7 @@ export const AdminPanel = () => {
                   })),
                   shared: sharedForm.getValues(),
                   footer: footerForm.getValues(),
+                  header: {},
                 },
               }
             : t,

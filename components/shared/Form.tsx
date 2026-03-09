@@ -20,9 +20,14 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { InfoIcon } from "lucide-react";
+import { ILayout, ISectionDecorations } from "@/types/blocks/config";
+import { useState } from "react";
 
 type FormProps = {
   formData: FormStructure[];
+  decorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["laptopDecorations"];
+  mobileDecorations?: ILayout["mobileDecorations"];
 };
 
 const transformData = (formMetadata: FormStructure[], data: Record<string, unknown>) => {
@@ -66,14 +71,19 @@ const CustomFieldLabel = ({
   error?: boolean;
   hint?: string;
 }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <FieldLabel htmlFor={name}>
       {hint && (
-        <Tooltip>
-          <TooltipTrigger>
+        <Tooltip open={open} onOpenChange={setOpen}>
+          <TooltipTrigger type="button" onClick={() => setOpen((prev) => !prev)}>
             <InfoIcon />
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent
+            className="max-w-[min(320px,calc(100vw-32px))] whitespace-pre-wrap"
+            collisionPadding={16}
+          >
             <Typography font="Cormorant" fontSize="xl">
               {hint}
             </Typography>
@@ -87,7 +97,7 @@ const CustomFieldLabel = ({
   );
 };
 
-export const Form = ({ formData }: FormProps) => {
+export const Form = ({ formData, decorations, laptopDecorations, mobileDecorations }: FormProps) => {
   const { handleSubmit, control } = useForm();
 
   const onSubmit = async (data: Record<string, unknown>) => {
@@ -102,8 +112,6 @@ export const Form = ({ formData }: FormProps) => {
       },
       body: JSON.stringify(mappedData),
     });
-
-    console.log(response);
   };
 
   const renderForm = (metaFormField: FormStructure) => {
@@ -231,6 +239,7 @@ export const Form = ({ formData }: FormProps) => {
           <Controller
             control={control}
             defaultValue={typedMetaField.defaultValue || ""}
+            key={typedMetaField.name}
             name={typedMetaField.name}
             rules={{ required: typedMetaField?.required }}
             render={({ fieldState, field }) => (
@@ -260,6 +269,7 @@ export const Form = ({ formData }: FormProps) => {
             name={typedMetaField.name}
             control={control}
             defaultValue={typedMetaField?.defaultValue}
+            key={typedMetaField.name}
             rules={{ required: typedMetaField?.required }}
             render={({ field, fieldState }) => (
               <Field orientation="responsive" data-invalid={fieldState.invalid}>
@@ -296,7 +306,11 @@ export const Form = ({ formData }: FormProps) => {
   };
 
   return (
-    <SectionWrapper>
+    <SectionWrapper
+      decorations={decorations}
+      laptopDecorations={laptopDecorations}
+      mobileDecorations={mobileDecorations}
+    >
       <Typography font="GreatVibes" fontSize="title">
         Анкета
       </Typography>

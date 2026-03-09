@@ -5,8 +5,10 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { ColorSchemaItem, IDressCode } from "@/types/blocks/dresscode";
+import { v4 } from "uuid";
 
 const DEFAULT_COLOR_SCHEMA: ColorSchemaItem = {
+  id: v4(),
   color: "#000000",
   maleDressCodeImg: "/system/placeholder.jpg",
   femaleDressCodeImg: "/system/placeholder.jpg",

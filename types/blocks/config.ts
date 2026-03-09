@@ -5,6 +5,7 @@ import { IPlace } from "@/types/blocks/place";
 import { IDetails } from "@/types/blocks/details";
 import { IFooter } from "@/types/blocks/footer";
 import { IFrame } from "@/types/blocks/frame";
+import { IHeader } from "@/types/blocks/header";
 
 export type ICalendar = object;
 
@@ -15,6 +16,22 @@ export type LayoutContent = IDressCode | IEvent | FormStructure[] | IPlace | IDe
 export interface ILayout {
   contentType: ContentTypes;
   content: LayoutContent;
+  decorations?: ISectionDecorations[];
+  laptopDecorations?: ISectionDecorations[];
+  mobileDecorations?: ISectionDecorations[];
+}
+
+export interface ISectionDecorations {
+  path: string;
+  width: number;
+  height: number;
+  position: {
+    top?: string;
+    bottom?: string;
+    left?: string;
+    right?: string;
+  };
+  className?: string;
 }
 
 export interface IImage {
@@ -35,4 +52,5 @@ export interface IConfigApp {
   layout: ILayout[];
   shared: IShared;
   footer: IFooter;
+  header?: IHeader;
 }

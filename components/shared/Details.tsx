@@ -3,12 +3,16 @@ import { Typography } from "@/components/ui/Typography";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { IDetails } from "@/types/blocks/details";
 import { motion } from "framer-motion";
+import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 
 type DetailsProps = {
   content: IDetails;
+  decorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["laptopDecorations"];
+  mobileDecorations?: ILayout["mobileDecorations"];
 };
 
-export const Details = ({ content }: DetailsProps) => {
+export const Details = ({ content, decorations, laptopDecorations, mobileDecorations }: DetailsProps) => {
   const alignmentClasses = {
     center: "items-center text-center",
     left: "items-start text-left",
@@ -16,7 +20,12 @@ export const Details = ({ content }: DetailsProps) => {
   };
 
   return (
-    <SectionWrapper className={alignmentClasses[content?.align ?? "left"]}>
+    <SectionWrapper
+      className={alignmentClasses[content?.align ?? "left"]}
+      decorations={decorations}
+      laptopDecorations={laptopDecorations}
+      mobileDecorations={mobileDecorations}
+    >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

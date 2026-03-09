@@ -1,7 +1,11 @@
 export interface ColorSchemaItem {
-  color: string;
-  maleDressCodeImg: string;
-  femaleDressCodeImg: string;
+  id: string;
+  color?: string;
+  colorImage?: string;
+  maleDressCodeImg?: string;
+  femaleDressCodeImg?: string;
+  onlyForMale?: boolean;
+  onlyForFemale?: boolean;
 }
 
 export interface IDressCode {

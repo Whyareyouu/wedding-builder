@@ -44,5 +44,3 @@ next-env.d.ts
 .idea
 .env
 /.env
-./configs/app-config_with_versions.json
-/configs/app-config_with_versions.json
