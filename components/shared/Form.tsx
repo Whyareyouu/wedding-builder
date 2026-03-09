@@ -26,6 +26,7 @@ import { toast } from "sonner";
 
 type FormProps = {
   formData: FormStructure[];
+  guestName?: string;
   decorations?: ILayout["decorations"];
   laptopDecorations?: ILayout["laptopDecorations"];
   mobileDecorations?: ILayout["mobileDecorations"];
@@ -95,7 +96,7 @@ const CustomFieldLabel = ({
   );
 };
 
-export const Form = ({ formData, decorations, laptopDecorations, mobileDecorations }: FormProps) => {
+export const Form = ({ formData, guestName, decorations, laptopDecorations, mobileDecorations }: FormProps) => {
   const { handleSubmit, control } = useForm();
 
   const onSubmit = async (data: Record<string, unknown>) => {
@@ -213,11 +214,13 @@ export const Form = ({ formData, decorations, laptopDecorations, mobileDecoratio
       }
       case "input": {
         const typedMetaField = metaFormField as ISimpleField;
+        const defaultValue =
+          typedMetaField.name === "name" && guestName ? guestName : typedMetaField.defaultValue || "";
         return (
           <Controller
             control={control}
             key={typedMetaField.name}
-            defaultValue={typedMetaField.defaultValue || ""}
+            defaultValue={defaultValue}
             name={typedMetaField.name}
             rules={{ required: typedMetaField?.required }}
             render={({ fieldState, field }) => (

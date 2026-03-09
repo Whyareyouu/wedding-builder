@@ -69,11 +69,12 @@ const renderDresscode = (
 
 const renderForm = (
   content: FormStructure[],
+  guestName?: string,
   decorations?: ILayout["decorations"],
   laptopDecorations?: ILayout["laptopDecorations"],
   mobileDecorations?: ILayout["mobileDecorations"],
 ) => {
-  return <Form formData={content} decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations} />;
+  return <Form formData={content} guestName={guestName} decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations} />;
 };
 
 const renderFrame = (content: IFrame) => {
@@ -83,6 +84,7 @@ const renderFrame = (content: IFrame) => {
 const renderContent = (
   layout: ILayout,
   shared: IShared,
+  guestName?: string,
   decorations?: ILayout["decorations"],
   laptopDecorations?: ILayout["laptopDecorations"],
   mobileDecorations?: ILayout["mobileDecorations"],
@@ -95,7 +97,7 @@ const renderContent = (
     case "DRESSCODE":
       return renderDresscode(content as IDressCode, decorations, laptopDecorations, mobileDecorations);
     case "FORM":
-      return renderForm(content as FormStructure[], decorations, laptopDecorations, mobileDecorations);
+      return renderForm(content as FormStructure[], guestName, decorations, laptopDecorations, mobileDecorations);
     case "CALENDAR":
       return renderCalendar(shared, decorations, laptopDecorations, mobileDecorations);
     case "PLACE":
@@ -124,7 +126,7 @@ export const InviteBuilder = ({ config, guestName }: InviteBuilderProps) => {
       <main>
         {config.layout.map((layout, index) => (
           <Fragment key={index}>
-            {renderContent(layout, config.shared, layout?.decorations, layout?.laptopDecorations, layout?.mobileDecorations)}
+            {renderContent(layout, config.shared, guestName, layout?.decorations, layout?.laptopDecorations, layout?.mobileDecorations)}
           </Fragment>
         ))}
       </main>

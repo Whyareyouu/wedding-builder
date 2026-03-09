@@ -599,7 +599,7 @@
               "type": "input",
               "required": true,
               "placeholder": "Укажите ваше ФИО (если несколько — через запятую)",
-              "name": "personlName",
+              "name": "name",
               "label": "Ваше имя",
               "defaultValue": ""
             },
