@@ -32,7 +32,11 @@ export const DressCode = ({ dresscode, decorations, laptopDecorations, mobileDec
   };
 
   return (
-    <SectionWrapper decorations={decorations} laptopDecorations={laptopDecorations} mobileDecorations={mobileDecorations}>
+    <SectionWrapper
+      decorations={decorations}
+      laptopDecorations={laptopDecorations}
+      mobileDecorations={mobileDecorations}
+    >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -158,7 +162,7 @@ export const DressCode = ({ dresscode, decorations, laptopDecorations, mobileDec
       {/* Модальное окно для просмотра изображения */}
       <Dialog open={!!modalImage} onOpenChange={(open) => !open && setModalImage(null)}>
         <DialogPortal>
-          <DialogOverlay className="bg-black/95" />
+          <DialogOverlay className="bg-black/80" />
           <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-[95vw] max-h-[95vh] translate-x-[-50%] translate-y-[-50%] p-0 overflow-hidden border-none focus:outline-none">
             <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 hover:bg-white/20 transition-colors backdrop-blur-sm">
               <X className="h-6 w-6 text-white" />

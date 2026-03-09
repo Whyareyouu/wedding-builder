@@ -27,11 +27,11 @@ export const SectionWrapper = ({
   laptopDecorations,
   mobileDecorations,
 }: React.PropsWithChildren<Props>) => {
+  type AbsoluteRect = { top: number; bottom: number; height: number; left: number; right: number; width: number };
+
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [rect, setRect] = useState<DOMRect | null>(null);
-  const [windowWidth, setWindowWidth] = useState<number>(
-    typeof window !== "undefined" ? window.innerWidth : REFERENCE_WIDTH,
-  );
+  const [rect, setRect] = useState<AbsoluteRect | null>(null);
+  const [windowWidth, setWindowWidth] = useState<number>(0);
 
   const scale = useMemo(() => Math.max(MIN_SCALE, Math.min(1, windowWidth / REFERENCE_WIDTH)), [windowWidth]);
 
@@ -51,25 +51,47 @@ export const SectionWrapper = ({
   useLayoutEffect(() => {
     if (!sectionRef.current) return;
 
+    let rafId: number;
+
     const update = () => {
-      setRect(sectionRef.current!.getBoundingClientRect());
+      if (!sectionRef.current) return;
+      const r = sectionRef.current.getBoundingClientRect();
+      const scrollY = window.scrollY;
+      setRect({
+        top: r.top + scrollY,
+        bottom: r.bottom + scrollY,
+        height: r.height,
+        left: r.left,
+        right: r.right,
+        width: r.width,
+      });
+    };
+
+    const scheduleUpdate = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(update);
     };
 
     update();
-    window.addEventListener("scroll", update);
-    window.addEventListener("resize", update);
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("load", update);
+
+    const resizeObserver = new ResizeObserver(scheduleUpdate);
+    resizeObserver.observe(document.body);
 
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("load", update);
+      resizeObserver.disconnect();
     };
   }, []);
 
   // --- Утилиты позиционирования ---
 
-  const resolveVerticalPosition = (position: ISectionDecorations["position"], rect: DOMRect, elementHeight: number) => {
-    const sectionTop = rect.top + window.scrollY;
-    const sectionBottom = sectionTop + rect.height;
+  const resolveVerticalPosition = (position: ISectionDecorations["position"], rect: AbsoluteRect, elementHeight: number) => {
+    const sectionTop = rect.top;
+    const sectionBottom = rect.bottom;
 
     if (position.top !== undefined) {
       if (position.top.includes("%")) {
@@ -87,7 +109,7 @@ export const SectionWrapper = ({
   };
 
   /** Desktop: overlap-коррекция + clamp к краям viewport */
-  const resolveDesktopHorizontal = (position: ISectionDecorations["position"], rect: DOMRect, elementWidth: number) => {
+  const resolveDesktopHorizontal = (position: ISectionDecorations["position"], rect: AbsoluteRect, elementWidth: number) => {
     if (!position.left && !position.right) {
       return { left: "0px", right: "0px" };
     }
@@ -141,7 +163,7 @@ export const SectionWrapper = ({
   // --- Рендер ---
 
   const portalLayer =
-    rect && activeDecorations && activeDecorations.length > 0
+    rect && windowWidth > 0 && activeDecorations && activeDecorations.length > 0
       ? createPortal(
           <>
             {activeDecorations.map((decoration, index) => {

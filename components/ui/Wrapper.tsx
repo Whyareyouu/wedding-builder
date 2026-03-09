@@ -5,7 +5,7 @@ type WrapperProps = React.PropsWithChildren<{
 export const Wrapper = ({ children, backgroundImage }: WrapperProps) => {
   return (
     <div
-      className="relative min-h-screen"
+      className="relative min-h-screen overflow-x-hidden"
       style={
         backgroundImage
           ? {

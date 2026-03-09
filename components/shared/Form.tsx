@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { InfoIcon } from "lucide-react";
 import { ILayout, ISectionDecorations } from "@/types/blocks/config";
+import { useState } from "react";
 
 type FormProps = {
   formData: FormStructure[];
@@ -70,14 +71,19 @@ const CustomFieldLabel = ({
   error?: boolean;
   hint?: string;
 }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <FieldLabel htmlFor={name}>
       {hint && (
-        <Tooltip>
-          <TooltipTrigger type="button">
+        <Tooltip open={open} onOpenChange={setOpen}>
+          <TooltipTrigger type="button" onClick={() => setOpen((prev) => !prev)}>
             <InfoIcon />
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent
+            className="max-w-[min(320px,calc(100vw-32px))] whitespace-pre-wrap"
+            collisionPadding={16}
+          >
             <Typography font="Cormorant" fontSize="xl">
               {hint}
             </Typography>

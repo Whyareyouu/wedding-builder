@@ -255,11 +255,11 @@
           "mobileDecorations": [
             {
               "path": "/decorations/white_roses.png",
-              "width": 160,
+              "width": 400,
               "height": 80,
               "position": {
-                "top": "5%",
-                "right": "30%"
+                "top": "3%",
+                "right": "25%"
               },
               "className": "opacity-50"
             }
