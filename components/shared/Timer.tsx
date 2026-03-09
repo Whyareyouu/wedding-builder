@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Typography } from "@/components/ui/Typography";
 
 type Props = {
   date: string;
@@ -20,25 +21,24 @@ type CircleProps = {
 };
 
 const TimeCircle = ({ value, max, label }: CircleProps) => {
-  const radius = 45;
-  const stroke = 3;
-  const normalizedRadius = radius - stroke * 2;
+  const radius = 44;
+  const stroke = 2.5;
+  const normalizedRadius = radius - stroke;
   const circumference = normalizedRadius * 2 * Math.PI;
-
   const progress = value / max;
   const strokeDashoffset = circumference - progress * circumference;
 
   return (
-    <div className="flex flex-col items-center gap-1.5">
-      <div className="relative w-[72px] h-[72px] sm:w-[100px] sm:h-[100px]">
-        <svg viewBox="0 0 100 100" className="w-full h-full">
+    <div className="flex flex-col items-center gap-2">
+      <div className="relative w-[80px] h-[80px] sm:w-[108px] sm:h-[108px]">
+        <svg viewBox="0 0 88 88" className="w-full h-full">
           <circle
             stroke="hsl(var(--border))"
             fill="transparent"
             strokeWidth={stroke}
             r={normalizedRadius}
-            cx="50"
-            cy="50"
+            cx="44"
+            cy="44"
           />
           <circle
             stroke="hsl(var(--foreground))"
@@ -47,20 +47,24 @@ const TimeCircle = ({ value, max, label }: CircleProps) => {
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
-            style={{ transition: "stroke-dashoffset 0.5s ease" }}
+            style={{ transition: "stroke-dashoffset 0.6s ease" }}
             r={normalizedRadius}
-            cx="50"
-            cy="50"
-            transform="rotate(-90 50 50)"
+            cx="44"
+            cy="44"
+            transform="rotate(-90 44 44)"
           />
         </svg>
 
-        <div className="absolute inset-0 flex items-center justify-center text-lg sm:text-2xl font-light text-foreground">
-          {value}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Typography font="Cormorant" fontSize="xxl" className="leading-none tabular-nums">
+            {String(value).padStart(2, "0")}
+          </Typography>
         </div>
       </div>
 
-      <span className="text-xs sm:text-sm text-muted-foreground tracking-wide uppercase">{label}</span>
+      <Typography font="Cormorant" fontSize="sm" className="tracking-widest uppercase opacity-60">
+        {label}
+      </Typography>
     </div>
   );
 };
@@ -73,12 +77,9 @@ const parseDate = (input: string) => {
 export const CountdownTimer = ({ date }: Props) => {
   const targetDate = parseDate(date);
 
-  const calculateTimeLeft = (): TimeLeft => {
+  const calculateTimeLeft = (): TimeLeft | null => {
     const difference = targetDate.getTime() - new Date().getTime();
-
-    if (difference <= 0) {
-      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    }
+    if (difference <= 0) return null;
 
     return {
       days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -88,7 +89,7 @@ export const CountdownTimer = ({ date }: Props) => {
     };
   };
 
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
+  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(calculateTimeLeft);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -98,8 +99,21 @@ export const CountdownTimer = ({ date }: Props) => {
     return () => clearInterval(timer);
   }, []);
 
+  if (!timeLeft) {
+    return (
+      <div className="flex flex-col items-center gap-3 py-4">
+        <Typography font="GreatVibes" fontSize="title" className="text-center leading-tight">
+          Сегодня наш день
+        </Typography>
+        <Typography font="Cormorant" fontSize="xl" className="tracking-widest opacity-60 text-center">
+          ✦ &nbsp; с любовью ждём вас &nbsp; ✦
+        </Typography>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex gap-4 sm:gap-10 justify-center items-center">
+    <div className="flex gap-3 sm:gap-6 justify-center items-center">
       <TimeCircle value={timeLeft.days} max={365} label="дней" />
       <TimeCircle value={timeLeft.hours} max={24} label="часов" />
       <TimeCircle value={timeLeft.minutes} max={60} label="минут" />

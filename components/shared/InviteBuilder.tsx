@@ -11,7 +11,7 @@ import { DressCode } from "@/components/shared/DressCode";
 import { FormStructure } from "@/types/blocks/form";
 import { Form } from "./Form";
 import { Footer } from "@/components/shared/Footer";
-import { Fragment, Suspense } from "react";
+import { Fragment } from "react";
 import { Calendar } from "@/components/shared/Calendar";
 import { IFrame } from "@/types/blocks/frame";
 import { PhotoFrame } from "@/components/shared/PhotoFrame";
@@ -19,6 +19,7 @@ import { Header } from "@/components/Header";
 
 type InviteBuilderProps = {
   config: IConfigApp;
+  guestName?: string;
 };
 
 const renderCalendar = (
@@ -108,7 +109,7 @@ const renderContent = (
   }
 };
 
-export const InviteBuilder = ({ config }: InviteBuilderProps) => {
+export const InviteBuilder = ({ config, guestName }: InviteBuilderProps) => {
   return (
     <Wrapper backgroundImage={config.shared?.backgroundImage}>
       {config?.header && (
@@ -127,9 +128,7 @@ export const InviteBuilder = ({ config }: InviteBuilderProps) => {
           </Fragment>
         ))}
       </main>
-      <Suspense>
-        <Footer date={config.shared.date} footerSettings={config?.footer} />
-      </Suspense>
+      <Footer date={config.shared.date} footerSettings={config?.footer} guestName={guestName} />
     </Wrapper>
   );
 };
