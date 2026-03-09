@@ -1,33 +1,31 @@
 import { InviteBuilder } from "@/components/shared/InviteBuilder";
 import { IConfigApp } from "@/types/blocks/config";
-import { api, ApiResponse } from "@/lib/api";
+import fsPromises from "fs/promises";
+import path from "path";
 
-export const dynamic = "force-dynamic";
+const DATA_FILE_PATH = path.join(process.cwd(), "configs", "app-config_with_versions.json");
+
+interface Template {
+  id: string;
+  isActive?: boolean;
+  content: IConfigApp;
+  [key: string]: unknown;
+}
 
 async function getActiveTemplate() {
   try {
-    const response = await api.get<ApiResponse<{ content: IConfigApp }>>("/layouts?active=true");
+    const rawData = await fsPromises.readFile(DATA_FILE_PATH);
+    const templates: Template[] = JSON.parse(rawData.toString());
+    const activeTemplate = templates.find((t) => t.isActive === true);
 
-    if (!response.success) {
-      console.warn(response.message || "Неуспешный ответ от сервера");
+    if (!activeTemplate) {
+      console.warn("Активный шаблон не найден");
       return null;
     }
 
-    if (!response.data) {
-      console.warn("Поле data отсутствует в успешном ответе");
-      return null;
-    }
-
-    return response.data;
+    return activeTemplate;
   } catch (err: unknown) {
-    const error = err instanceof Error ? err : new Error(String(err));
-
-    if (error.message.includes("404")) {
-      console.warn("Активный шаблон не найден (404)");
-    } else {
-      console.error("Ошибка при получении активного шаблона:", error);
-    }
-
+    console.error("Ошибка при получении активного шаблона:", err);
     return null;
   }
 }
