@@ -39,6 +39,27 @@
               }
             }
           ],
+          "mobileDecorations": [
+            {
+              "path": "/decorations/piones.png",
+              "width": 60,
+              "height": 90,
+              "position": {
+                "top": "0px",
+                "left": "5%"
+              },
+              "className": "opacity-40"
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 60,
+              "height": 90,
+              "position": {
+                "bottom": "55%",
+                "right": "5%"
+              }
+            }
+          ],
           "content": {
             "title": "Дорогие родные и друзья!",
             "align": "center",
@@ -91,7 +112,18 @@
               }
             }
           ],
-          "content": {}
+          "mobileDecorations": [
+            {
+              "path": "/decorations/piones.png",
+              "width": 60,
+              "height": 90,
+              "position": {
+                "top": "0px",
+                "left": "0px"
+              },
+              "className": "opacity-40"
+            }
+          ]
         },
         {
           "contentType": "PLACE",
@@ -135,6 +167,18 @@
               }
             }
           ],
+          "mobileDecorations": [
+            {
+              "path": "/decorations/white_roses.png",
+              "width": 160,
+              "height": 80,
+              "position": {
+                "top": "5%",
+                "right": "30%"
+              },
+              "className": "opacity-50"
+            }
+          ],
           "content": {
             "title": "Локация",
             "type": "MAP",
@@ -145,10 +189,7 @@
                 "startTime": "14:00",
                 "dividerIcon": "icons/heart.svg",
                 "mapSettings": {
-                  "coordinates": [
-                    55.806953,
-                    38.17235
-                  ],
+                  "coordinates": [55.806953, 38.17235],
                   "hint": "Отдел № 1 Управления ЗАГС по Богородскому городскому округу и городскому округу Черноголовка, Октябрьская ул., 4, Старая Купавна",
                   "markerIcon": "/images/Shelby.png",
                   "yandexMapUrl": "https://yandex.ru/maps/-/CPU4V2yY"
@@ -159,10 +200,7 @@
                 "address": "ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
                 "startTime": "16:00",
                 "mapSettings": {
-                  "coordinates": [
-                    55.772403,
-                    37.923159
-                  ],
+                  "coordinates": [55.772403, 37.923159],
                   "hint": "Загородный клуб Дольче \n ул. Радио, 26А, микрорайон Салтыковка, Балашиха",
                   "markerIcon": "/images/Shelby.png",
                   "yandexMapUrl": "https://yandex.ru/maps/-/CPU4ZQKi"
@@ -191,6 +229,28 @@
                 "bottom": "0",
                 "right": "20%"
               }
+            }
+          ],
+          "mobileDecorations": [
+            {
+              "path": "/decorations/heart.png",
+              "width": 100,
+              "height": 100,
+              "position": {
+                "top": "10px",
+                "left": "0px"
+              },
+              "className": "opacity-60"
+            },
+            {
+              "path": "/decorations/heart.png",
+              "width": 100,
+              "height": 100,
+              "position": {
+                "top": "10px",
+                "right": "0px"
+              },
+              "className": "opacity-60"
             }
           ],
           "content": {
@@ -261,6 +321,18 @@
                 "top": "35%",
                 "left": "10%"
               }
+            }
+          ],
+          "mobileDecorations": [
+            {
+              "path": "/decorations/cat.png",
+              "width": 160,
+              "height": 160,
+              "position": {
+                "top": "0px",
+                "left": "0px"
+              },
+              "className": "opacity-70"
             }
           ],
           "content": {
@@ -351,6 +423,38 @@
                 "top": "35%",
                 "right": "10%"
               }
+            }
+          ],
+          "mobileDecorations": [
+            {
+              "path": "/decorations/heart.png",
+              "width": 90,
+              "height": 90,
+              "position": {
+                "bottom": "0px",
+                "left": "0px"
+              },
+              "className": "rotate-[300deg] opacity-60"
+            },
+            {
+              "path": "/decorations/heart.png",
+              "width": 90,
+              "height": 90,
+              "position": {
+                "bottom": "0px",
+                "right": "0px"
+              },
+              "className": "rotate-[300deg] opacity-60"
+            },
+            {
+              "path": "/decorations/cats.png",
+              "width": 140,
+              "height": 140,
+              "position": {
+                "top": "30px",
+                "right": "0px"
+              },
+              "className": "opacity-70"
             }
           ],
           "content": [

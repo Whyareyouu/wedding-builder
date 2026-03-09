@@ -21,50 +21,79 @@ type InviteBuilderProps = {
   config: IConfigApp;
 };
 
-const renderCalendar = (shared: IShared, decorations?: ILayout["decorations"]) => {
-  return <Calendar targetDate={shared.date} decorations={decorations} />;
+const renderCalendar = (
+  shared: IShared,
+  decorations?: ILayout["decorations"],
+  mobileDecorations?: ILayout["decorations"],
+) => {
+  return <Calendar targetDate={shared.date} decorations={decorations} mobileDecorations={mobileDecorations} />;
 };
 
-const renderPlace = (content: IPlace, decorations?: ILayout["decorations"]) => {
-  return <Place content={content} decorations={decorations} />;
+const renderPlace = (
+  content: IPlace,
+  decorations?: ILayout["decorations"],
+  mobileDecorations?: ILayout["decorations"],
+) => {
+  return <Place content={content} decorations={decorations} mobileDecorations={mobileDecorations} />;
 };
 
-const renderTimings = (content: IEvent, decorations?: ILayout["decorations"]) => {
-  return <EventPlan content={content} decorations={decorations} />;
+const renderTimings = (
+  content: IEvent,
+  decorations?: ILayout["decorations"],
+  mobileDecorations?: ILayout["decorations"],
+) => {
+  return <EventPlan content={content} decorations={decorations} mobileDecorations={mobileDecorations} />;
 };
 
-const renderDetails = (content: IDetails, decorations?: ILayout["decorations"]) => {
-  return <Details content={content as IDetails} decorations={decorations} />;
+const renderDetails = (
+  content: IDetails,
+  decorations?: ILayout["decorations"],
+  mobileDecorations?: ILayout["decorations"],
+) => {
+  return <Details content={content as IDetails} decorations={decorations} mobileDecorations={mobileDecorations} />;
 };
 
-const renderDresscode = (content: IDressCode, decorations?: ILayout["decorations"]) => {
-  return <DressCode dresscode={content} decorations={decorations} />;
+const renderDresscode = (
+  content: IDressCode,
+  decorations?: ILayout["decorations"],
+  mobileDecorations?: ILayout["decorations"],
+) => {
+  return <DressCode dresscode={content} decorations={decorations} mobileDecorations={mobileDecorations} />;
 };
 
-const renderForm = (content: FormStructure[], decorations?: ILayout["decorations"]) => {
-  return <Form formData={content} decorations={decorations} />;
+const renderForm = (
+  content: FormStructure[],
+  decorations?: ILayout["decorations"],
+  mobileDecorations?: ILayout["decorations"],
+) => {
+  return <Form formData={content} decorations={decorations} mobileDecorations={mobileDecorations} />;
 };
 
 const renderFrame = (content: IFrame) => {
   return <PhotoFrame content={content} />;
 };
 
-const renderContent = (layout: ILayout, shared: IShared, decorations?: ILayout["decorations"]) => {
+const renderContent = (
+  layout: ILayout,
+  shared: IShared,
+  decorations?: ILayout["decorations"],
+  mobileDecorations?: ILayout["decorations"],
+) => {
   const { content, contentType } = layout;
 
   switch (contentType) {
     case "DETAILS":
-      return renderDetails(content as IDetails, decorations);
+      return renderDetails(content as IDetails, decorations, mobileDecorations);
     case "DRESSCODE":
-      return renderDresscode(content as IDressCode, decorations);
+      return renderDresscode(content as IDressCode, decorations, mobileDecorations);
     case "FORM":
-      return renderForm(content as FormStructure[], decorations);
+      return renderForm(content as FormStructure[], decorations, mobileDecorations);
     case "CALENDAR":
-      return renderCalendar(shared, decorations);
+      return renderCalendar(shared, decorations, mobileDecorations);
     case "PLACE":
-      return renderPlace(content as IPlace, decorations);
+      return renderPlace(content as IPlace, decorations, mobileDecorations);
     case "TIMINGS":
-      return renderTimings(content as IEvent, decorations);
+      return renderTimings(content as IEvent, decorations, mobileDecorations);
     case "FRAME":
       return renderFrame(content as IFrame);
     default:
@@ -86,7 +115,9 @@ export const InviteBuilder = ({ config }: InviteBuilderProps) => {
       )}
       <main>
         {config.layout.map((layout, index) => (
-          <Fragment key={index}>{renderContent(layout, config.shared, layout?.decorations)}</Fragment>
+          <Fragment key={index}>
+            {renderContent(layout, config.shared, layout?.decorations, layout?.mobileDecorations)}
+          </Fragment>
         ))}
       </main>
       <Footer date={config.shared.date} footerSettings={config?.footer} />

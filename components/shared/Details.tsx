@@ -8,9 +8,10 @@ import { ILayout, ISectionDecorations } from "@/types/blocks/config";
 type DetailsProps = {
   content: IDetails;
   decorations?: ILayout["decorations"];
+  mobileDecorations?: ILayout["decorations"];
 };
 
-export const Details = ({ content, decorations }: DetailsProps) => {
+export const Details = ({ content, decorations, mobileDecorations }: DetailsProps) => {
   const alignmentClasses = {
     center: "items-center text-center",
     left: "items-start text-left",
@@ -18,7 +19,11 @@ export const Details = ({ content, decorations }: DetailsProps) => {
   };
 
   return (
-    <SectionWrapper className={alignmentClasses[content?.align ?? "left"]} decorations={decorations}>
+    <SectionWrapper
+      className={alignmentClasses[content?.align ?? "left"]}
+      decorations={decorations}
+      mobileDecorations={mobileDecorations}
+    >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

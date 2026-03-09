@@ -74,7 +74,7 @@ export const MapPlace = ({ place, isRight, isLastElement }: MapPlaceProps) => {
               <MapPopup>
                 <div className="flex flex-col">{place.mapSettings.hint}</div>
                 {place.mapSettings?.yandexMapUrl && (
-                  <Button asChild className="mt-4">
+                  <Button asChild className="mt-4" variant="secondary">
                     <a
                       href={place.mapSettings.yandexMapUrl}
                       target="_blank"

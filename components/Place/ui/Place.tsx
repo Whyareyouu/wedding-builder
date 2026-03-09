@@ -13,12 +13,12 @@ import { ILayout } from "@/types/blocks/config";
 type PlaceProps = {
   content: IPlace;
   decorations?: ILayout["decorations"];
+  mobileDecorations?: ILayout["decorations"];
 };
 
-export const Place = ({ content, decorations }: PlaceProps) => {
-  console.log(decorations);
+export const Place = ({ content, decorations, mobileDecorations }: PlaceProps) => {
   return (
-    <SectionWrapper className="items-stretch" decorations={decorations}>
+    <SectionWrapper className="items-stretch" decorations={decorations} mobileDecorations={mobileDecorations}>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

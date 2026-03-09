@@ -2,20 +2,22 @@
 
 import { useState } from "react";
 import { Typography } from "@/components/ui/Typography";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { ColorSchemaItem, IDressCode } from "@/types/blocks/dresscode";
 import { ILayout } from "@/types/blocks/config";
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogPortal, DialogOverlay } from "@/components/ui/dialog";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
 type DressCodeProps = {
   dresscode: IDressCode;
   decorations?: ILayout["decorations"];
+  mobileDecorations?: ILayout["decorations"];
 };
 
-export const DressCode = ({ dresscode, decorations }: DressCodeProps) => {
+export const DressCode = ({ dresscode, decorations, mobileDecorations }: DressCodeProps) => {
   const [selectedColor, setSelectedColor] = useState<ColorSchemaItem | null>(null);
   const [modalImage, setModalImage] = useState<string | null>(null);
 
@@ -29,7 +31,7 @@ export const DressCode = ({ dresscode, decorations }: DressCodeProps) => {
   };
 
   return (
-    <SectionWrapper decorations={decorations}>
+    <SectionWrapper decorations={decorations} mobileDecorations={mobileDecorations}>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -154,18 +156,21 @@ export const DressCode = ({ dresscode, decorations }: DressCodeProps) => {
 
       {/* Модальное окно для просмотра изображения */}
       <Dialog open={!!modalImage} onOpenChange={(open) => !open && setModalImage(null)}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 overflow-hidden bg-black/95 border-none">
-          <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 hover:bg-white/20 transition-colors backdrop-blur-sm">
-            <X className="h-6 w-6 text-white" />
-            <span className="sr-only">Закрыть</span>
-          </DialogClose>
+        <DialogPortal>
+          <DialogOverlay className="bg-black/95" />
+          <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-[95vw] max-h-[95vh] translate-x-[-50%] translate-y-[-50%] p-0 overflow-hidden border-none focus:outline-none">
+            <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 hover:bg-white/20 transition-colors backdrop-blur-sm">
+              <X className="h-6 w-6 text-white" />
+              <span className="sr-only">Закрыть</span>
+            </DialogClose>
 
-          {modalImage && (
-            <div className="relative w-full h-[95vh] flex items-center justify-center">
-              <Image src={modalImage} alt="Просмотр образа" fill style={{ objectFit: "contain" }} className="p-4" />
-            </div>
-          )}
-        </DialogContent>
+            {modalImage && (
+              <div className="relative w-full h-[95vh] flex items-center justify-center">
+                <Image src={modalImage} alt="Просмотр образа" fill style={{ objectFit: "contain" }} className="p-4" />
+              </div>
+            )}
+          </DialogPrimitive.Content>
+        </DialogPortal>
       </Dialog>
     </SectionWrapper>
   );

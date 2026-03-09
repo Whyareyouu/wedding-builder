@@ -2,44 +2,57 @@
 
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { useLayoutEffect, useRef, useState, useEffect, useMemo } from "react";
 import { ILayout, ISectionDecorations } from "@/types/blocks/config";
+
+type DeviceMode = "desktop" | "laptop" | "mobile";
 
 type Props = {
   className?: HTMLElement["className"];
   decorations?: ILayout["decorations"];
+  laptopDecorations?: ILayout["decorations"];
   mobileDecorations?: ILayout["decorations"];
   groupId?: string;
 };
 
-const MOBILE_BREAKPOINT = 1280; // xl breakpoint
+const REFERENCE_WIDTH = 1920;
+const MIN_SCALE = 0.5;
+const LAPTOP_BREAKPOINT = 1280;
+const MOBILE_BREAKPOINT = 540;
 
 export const SectionWrapper = ({
   children,
   className,
   decorations,
+  laptopDecorations,
   mobileDecorations,
 }: React.PropsWithChildren<Props>) => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [rect, setRect] = useState<DOMRect | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [windowWidth, setWindowWidth] = useState<number>(
+    typeof window !== "undefined" ? window.innerWidth : REFERENCE_WIDTH,
+  );
+
+  const scale = useMemo(() => Math.max(MIN_SCALE, Math.min(1, windowWidth / REFERENCE_WIDTH)), [windowWidth]);
+
+  const deviceMode: DeviceMode = useMemo(() => {
+    if (windowWidth < MOBILE_BREAKPOINT) return "mobile";
+    if (windowWidth < LAPTOP_BREAKPOINT) return "laptop";
+    return "desktop";
+  }, [windowWidth]);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useLayoutEffect(() => {
     if (!sectionRef.current) return;
 
     const update = () => {
-      const r = sectionRef.current!.getBoundingClientRect();
-      setRect(r);
+      setRect(sectionRef.current!.getBoundingClientRect());
     };
 
     update();
@@ -51,6 +64,8 @@ export const SectionWrapper = ({
       window.removeEventListener("resize", update);
     };
   }, []);
+
+  // --- Утилиты позиционирования ---
 
   const resolveVerticalPosition = (position: ISectionDecorations["position"], rect: DOMRect, elementHeight: number) => {
     const sectionTop = rect.top + window.scrollY;
@@ -71,127 +86,93 @@ export const SectionWrapper = ({
     return sectionTop + "px";
   };
 
-  const resolveHorizontalPosition = (
-    position: ISectionDecorations["position"],
-    rect: DOMRect,
-    elementWidth: number,
-  ) => {
+  /** Desktop: overlap-коррекция + clamp к краям viewport */
+  const resolveDesktopHorizontal = (position: ISectionDecorations["position"], rect: DOMRect, elementWidth: number) => {
     if (!position.left && !position.right) {
       return { left: "0px", right: "0px" };
     }
 
-    const windowWidth = document.body.getBoundingClientRect().width;
+    const bodyWidth = document.body.getBoundingClientRect().width;
 
     if (position.left) {
-      const leftCord = windowWidth * (parseFloat(position.left) / 100);
-      const elementRightEdge = leftCord + elementWidth;
+      const leftCord = bodyWidth * (parseFloat(position.left) / 100);
+      let finalLeft = leftCord;
 
-      if (elementRightEdge >= rect.left) {
-        const overlap = Math.ceil(elementRightEdge - rect.left);
-        return { left: `${Math.ceil(leftCord - overlap)}px` };
+      if (leftCord + elementWidth >= rect.left) {
+        finalLeft = leftCord - (leftCord + elementWidth - rect.left);
       }
 
-      return { left: `${leftCord}px` };
+      return { left: `${Math.round(Math.max(0, finalLeft))}px` };
     }
 
     if (position.right) {
-      const rightCord = windowWidth * (parseFloat(position.right) / 100);
-      const elementLeftEdge = windowWidth - rightCord - elementWidth;
+      const rightCord = bodyWidth * (parseFloat(position.right) / 100);
+      let finalRight = rightCord;
 
+      const elementLeftEdge = bodyWidth - rightCord - elementWidth;
       if (elementLeftEdge <= rect.right) {
-        const overlap = Math.ceil(rect.right - elementLeftEdge);
-        return { right: `${Math.ceil(rightCord - overlap)}px` };
+        finalRight = rightCord - (rect.right - elementLeftEdge);
       }
 
-      return { right: `${rightCord}px` };
+      return { right: `${Math.round(Math.max(0, finalRight))}px` };
     }
   };
 
-  // Мобильные декорации — простое позиционирование,
-  // могут залезать на контент (без overlap-коррекции)
-  const resolveMobileHorizontalPosition = (position: ISectionDecorations["position"]) => {
+  /** Laptop & Mobile: позиция напрямую из конфига, без overlap-коррекции */
+  const resolveDirectHorizontal = (position: ISectionDecorations["position"]) => {
     if (position.left) return { left: position.left };
     if (position.right) return { right: position.right };
     return { left: "0px" };
   };
 
-  const resolveMobileVerticalPosition = (
-    position: ISectionDecorations["position"],
-    rect: DOMRect,
-    elementHeight: number,
-  ) => {
-    const sectionTop = rect.top + window.scrollY;
-    const sectionBottom = sectionTop + rect.height;
+  // --- Выбор активного набора декораций ---
 
-    if (position.top !== undefined) {
-      if (position.top.includes("%")) {
-        const percent = parseFloat(position.top);
-        return sectionTop + (rect.height * percent) / 100 + "px";
-      }
-      return sectionTop + parseFloat(position.top) + "px";
+  const activeDecorations = useMemo(() => {
+    switch (deviceMode) {
+      case "mobile":
+        return mobileDecorations ?? null;
+      case "laptop":
+        // Fallback: если laptop-декорации не заданы — пробуем desktop
+        return laptopDecorations ?? null;
+      case "desktop":
+        return decorations ?? null;
     }
+  }, [deviceMode, decorations, laptopDecorations, mobileDecorations]);
 
-    if (position.bottom !== undefined) {
-      return sectionBottom - parseFloat(position.bottom) - elementHeight + "px";
-    }
-
-    return sectionTop + "px";
-  };
-
-  const activeDecorations = isMobile ? mobileDecorations : decorations;
+  // --- Рендер ---
 
   const portalLayer =
-    rect && (activeDecorations || []).length > 0
+    rect && activeDecorations && activeDecorations.length > 0
       ? createPortal(
           <>
-            {activeDecorations!.map((decoration, index) => {
-              if (isMobile) {
-                const top = resolveMobileVerticalPosition(decoration.position, rect, decoration.height);
-                const horizontal = resolveMobileHorizontalPosition(decoration.position);
+            {activeDecorations.map((decoration, index) => {
+              const scaledWidth = Math.round(decoration.width * scale);
+              const scaledHeight = Math.round(decoration.height * scale);
 
-                return (
-                  <div
-                    key={`mobile-${index}`}
-                    className={`absolute pointer-events-none ${decoration.className || ""}`}
-                    style={{
-                      position: "absolute",
-                      top,
-                      ...horizontal,
-                      zIndex: 0,
-                    }}
-                  >
-                    <Image
-                      src={decoration.path}
-                      alt=""
-                      width={decoration.width}
-                      height={decoration.height}
-                      className="opacity-30"
-                    />
-                  </div>
-                );
-              }
+              const top = resolveVerticalPosition(decoration.position, rect, scaledHeight);
 
-              const computedTop = resolveVerticalPosition(decoration.position, rect, decoration.height);
-
-              const computedHorizontal = resolveHorizontalPosition(decoration.position, rect, decoration.width);
+              const horizontal =
+                deviceMode === "desktop"
+                  ? resolveDesktopHorizontal(decoration.position, rect, scaledWidth)
+                  : resolveDirectHorizontal(decoration.position);
 
               return (
                 <div
-                  key={`desktop-${index}`}
-                  className={`absolute pointer-events-none hidden xl:block ${decoration.className || ""}`}
+                  key={`${deviceMode}-${index}`}
+                  className={`absolute pointer-events-none ${decoration.className || ""}`}
                   style={{
                     position: "absolute",
-                    top: computedTop,
-                    left: computedHorizontal?.left,
-                    right: computedHorizontal?.right,
+                    top,
+                    left: horizontal?.left,
+                    right: horizontal?.right,
                     zIndex: 0,
                   }}
                 >
                   <Image
                     src={decoration.path}
                     alt=""
-                    width={decoration.width}
-                    height={decoration.height}
+                    width={scaledWidth}
+                    height={scaledHeight}
                     className="opacity-30"
                   />
                 </div>
