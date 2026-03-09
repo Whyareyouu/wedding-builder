@@ -1,7 +1,8 @@
 import { InviteBuilder } from "@/components/shared/InviteBuilder";
-
 import { IConfigApp } from "@/types/blocks/config";
 import { api, ApiResponse } from "@/lib/api";
+
+export const dynamic = "force-dynamic";
 
 async function getActiveTemplate() {
   try {
