@@ -39,6 +39,38 @@
               }
             }
           ],
+          "laptopDecorations": [
+            {
+              "path": "/decorations/piones.png",
+              "width": 140,
+              "height": 170,
+              "position": {
+                "top": "45%",
+                "left": "15%"
+              },
+              "className": "opacity-70"
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 130,
+              "height": 160,
+              "position": {
+                "bottom": "0px",
+                "left": "2%"
+              },
+              "className": "opacity-70"
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 135,
+              "height": 175,
+              "position": {
+                "top": "2%",
+                "right": "3%"
+              },
+              "className": "opacity-70"
+            }
+          ],
           "mobileDecorations": [
             {
               "path": "/decorations/piones.png",
@@ -112,6 +144,37 @@
               }
             }
           ],
+          "laptopDecorations": [
+            {
+              "path": "/decorations/piones.png",
+              "width": 140,
+              "height": 110,
+              "position": {
+                "top": "50%",
+                "left": "10%"
+              },
+              "className": "opacity-40"
+            },
+
+            {
+              "path": "/decorations/piones.png",
+              "width": 130,
+              "height": 110,
+              "position": {
+                "top": "5%",
+                "right": "4%"
+              }
+            },
+            {
+              "path": "/decorations/piones.png",
+              "width": 130,
+              "height": 110,
+              "position": {
+                "bottom": "0",
+                "right": "10%"
+              }
+            }
+          ],
           "mobileDecorations": [
             {
               "path": "/decorations/piones.png",
@@ -136,7 +199,7 @@
                 "top": "10%",
                 "left": "40px"
               },
-              "className": "opacity-70"
+              "className": "opacity-50"
             },
             {
               "path": "/decorations/white_roses.png",
@@ -146,7 +209,7 @@
                 "bottom": "10%",
                 "left": "40px"
               },
-              "className": "opacity-70"
+              "className": "opacity-50"
             },
             {
               "path": "/decorations/flower_col.png",
@@ -155,7 +218,8 @@
               "position": {
                 "bottom": "10%",
                 "right": "40px"
-              }
+              },
+              "className": "opacity-50"
             },
             {
               "path": "/decorations/white_roses.png",
@@ -164,6 +228,27 @@
               "position": {
                 "top": "10%",
                 "right": "40px"
+              },
+              "className": "opacity-50"
+            }
+          ],
+          "laptopDecorations": [
+            {
+              "path": "/decorations/sakura.png",
+              "width": 160,
+              "height": 200,
+              "position": {
+                "top": "7%",
+                "left": "15%"
+              }
+            },
+            {
+              "path": "/decorations/sakura.png",
+              "width": 160,
+              "height": 200,
+              "position": {
+                "top": "7%",
+                "right": "12%"
               }
             }
           ],
@@ -228,6 +313,26 @@
               "position": {
                 "bottom": "0",
                 "right": "20%"
+              }
+            }
+          ],
+          "laptopDecorations": [
+            {
+              "path": "/decorations/heart.png",
+              "width": 300,
+              "height": 300,
+              "position": {
+                "top": "20%",
+                "left": "5%"
+              }
+            },
+            {
+              "path": "/decorations/heart.png",
+              "width": 300,
+              "height": 300,
+              "position": {
+                "bottom": "0px",
+                "right": "5%"
               }
             }
           ],
@@ -321,6 +426,17 @@
                 "top": "35%",
                 "left": "10%"
               }
+            }
+          ],
+          "laptopDecorations": [
+            {
+              "path": "/decorations/cat.png",
+              "width": 260,
+              "height": 260,
+              "position": {
+                "top": "10%",
+                "left": "0px"
+              }, "className": "opacity-70"
             }
           ],
           "mobileDecorations": [
@@ -422,6 +538,27 @@
               "position": {
                 "top": "35%",
                 "right": "10%"
+              }
+            }
+          ],
+          "laptopDecorations": [
+            {
+              "path": "/decorations/heart.png",
+              "width": 300,
+              "height": 300,
+              "position": {
+                "top": "5%",
+                "left": "3%"
+              },
+              "className": "rotate-[300deg]"
+            },
+            {
+              "path": "/decorations/cats.png",
+              "width": 250,
+              "height": 250,
+              "position": {
+                "top": "35%",
+                "right": "0px"
               }
             }
           ],
@@ -547,7 +684,7 @@
             {
               "type": "select",
               "label": "Присутствие в ЗАГСе",
-              "name": "activity",
+              "name": "registry",
               "required": true,
               "fields": [
                 {

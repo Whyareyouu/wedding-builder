@@ -132,7 +132,6 @@ export const SectionWrapper = ({
       case "mobile":
         return mobileDecorations ?? null;
       case "laptop":
-        // Fallback: если laptop-декорации не заданы — пробуем desktop
         return laptopDecorations ?? null;
       case "desktop":
         return decorations ?? null;
@@ -168,13 +167,7 @@ export const SectionWrapper = ({
                     zIndex: 0,
                   }}
                 >
-                  <Image
-                    src={decoration.path}
-                    alt=""
-                    width={scaledWidth}
-                    height={scaledHeight}
-                    className="opacity-30"
-                  />
+                  <Image src={decoration.path} alt="" width={scaledWidth} height={scaledHeight} />
                 </div>
               );
             })}

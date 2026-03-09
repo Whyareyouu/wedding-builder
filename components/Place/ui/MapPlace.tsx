@@ -59,7 +59,7 @@ export const MapPlace = ({ place, isRight, isLastElement }: MapPlaceProps) => {
         className="rounded-2xl overflow-hidden shadow-lg"
       >
         <ShadcnMap center={place.mapSettings.coordinates as [number, number]} zoom={place.mapSettings?.zoom ?? 18}>
-          <MapTileLayer />
+          <MapTileLayer darkUrl="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" />
           <MapZoomControl />
           <MapLocateControl />
           <MapMarker
