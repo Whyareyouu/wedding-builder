@@ -19,7 +19,7 @@ import {
 } from "@/types/blocks/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { InfoIcon } from "lucide-react";
+import { InfoIcon, Loader2 } from "lucide-react";
 import { ILayout } from "@/types/blocks/config";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -97,7 +97,7 @@ const CustomFieldLabel = ({
 };
 
 export const Form = ({ formData, guestName, decorations, laptopDecorations, mobileDecorations }: FormProps) => {
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, formState: { isSubmitting } } = useForm();
 
   const onError = () => {
     toast.warning("Заполните все обязательные поля", {
@@ -335,10 +335,14 @@ export const Form = ({ formData, guestName, decorations, laptopDecorations, mobi
       </Typography>
       <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col gap-4 w-full">
         {formData.map((formField) => renderForm(formField))}
-        <Button type="submit" variant="default" className="rounded-3xl max-w-72 w-full self-center py-8">
-          <Typography font="Cormorant" fontSize="xxl">
-            Отправить
-          </Typography>
+        <Button type="submit" variant="default" disabled={isSubmitting} className="rounded-3xl max-w-72 w-full self-center py-8">
+          {isSubmitting ? (
+            <Loader2 className="animate-spin !size-6" />
+          ) : (
+            <Typography font="Cormorant" fontSize="xxl">
+              Отправить
+            </Typography>
+          )}
         </Button>
       </form>
     </SectionWrapper>
